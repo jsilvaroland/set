@@ -7,7 +7,7 @@ const ATTRIBUTES = {
 	shadings: ['solid', 'striped', 'open'],
 };
 
-export default class Deck {
+class Deck {
 	constructor() {
 		this.deck = [];
 	}
@@ -43,11 +43,11 @@ export default class Deck {
 	shuffle() {
 		const { deck } = this;
 		let count = deck.length;
+		let i;
 
 		while (count) {
-			let i = Math.floor(Math.random() * count);
+			i = Math.floor(Math.random() * count--);
 			[deck[count], deck[i]] = [deck[i], deck[count]];
-			count--;
 		}
 	}
 
@@ -60,4 +60,10 @@ export default class Deck {
 		this.repopulateDeckExpert();
 		this.shuffle();
 	}
+
+	deal() {
+		return this.deck.pop();
+	}
 }
+
+export default Deck;

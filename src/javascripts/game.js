@@ -3,8 +3,9 @@ import Deck from './deck';
 // game logic will go here, but not menu logic
 // all canvas logic will go into set.js later
 
-export default class Game {
+class Game {
 	constructor(canvas) {
+		this.deck = new Deck();
 		this.ctx = canvas.getContext("2d");
 		this.dimensions = { width: canvas.width, height: canvas.height };
 		// this.handleClicks();
@@ -12,6 +13,7 @@ export default class Game {
 
 	newGame() {
 		// lay 12 cards out on playing field
+		this.deck.resetDeckExpert();
 			// i have an array of shuffled cards
 		// start timer.
 	}
@@ -44,3 +46,5 @@ export default class Game {
 		// increases timer, likely will call within newGame
 	}
 }
+
+export default Game;
