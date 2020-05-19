@@ -1,3 +1,5 @@
+// import * as Images from '../assets'; // maybe add images to each object?
+
 const ATTRIBUTES = {
 	colors: ['red', 'green', 'purple'],
 	numbers: ['one', 'two', 'three'],
