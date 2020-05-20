@@ -1,0 +1,23 @@
+.title {
+    text-align: center;
+    font-size: 36px;
+}
+
+.set-wrapper {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    height: 692px; 
+    width: 719;
+}
+
+#set-game {
+    display: inline-block;
+}
+
+.set-buttons {
+    height: 643px;
+    width: 300px;
+    padding-top: 49px;
+    text-align: left;
+}

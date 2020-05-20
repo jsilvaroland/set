@@ -9,7 +9,8 @@ const ATTRIBUTES = {
 
 class Deck {
 	constructor() {
-		this.deck = [];
+		// this.deck = [];
+		this.resetDeckExpert();
 	}
 
 	repopulateDeckNovice() {
@@ -28,12 +29,15 @@ class Deck {
 	repopulateDeckExpert() {
 		// empties deck if not already empty
 		this.deck = [];
-		
+		let image;
+
 		ATTRIBUTES.colors.forEach(color => {
 			ATTRIBUTES.numbers.forEach(number => {
 				ATTRIBUTES.shapes.forEach(shape => {
 					ATTRIBUTES.shadings.forEach(shading => {
-						this.deck.push({ color, number, shape, shading });
+						image = new Image();
+						image.src = `../src/assets/${color}-${number}-${shape}-${shading}.png`;
+						this.deck.push({ color, number, shape, shading, image });
 					});
 				});
 			});
