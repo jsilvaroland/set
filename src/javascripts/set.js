@@ -1,20 +1,30 @@
 import Game from './game';
-import Board from './board';
 
-class SetOnline {
+class Set {
     constructor(canvas) {
         this.ctx = canvas.getContext("2d");
-        this.game = new Game();
-        // this.board = new Board(this.ctx); // in the constructor for now, will switch to onClick function or something later
+        this.canvas = canvas;
+        this.dimensions = { width: canvas.width, height: canvas.height };
     }
 
-    drawBoard() {
-        this.board = new Board(this.ctx);
+    newGame() {
+        console.log('clearing prev game event listeners');
+        if (this.game) {
+            this.game.removeGameEventListeners(this.canvas);
+            console.log('hi');
+        }
+        this.game = new Game(this.ctx, this.canvas);
+        this.game.addGameEventListeners(this.canvas);
+        
+        // remove menu onClicks
+        // set up game click listeners
     }
+    
 
-    // some on click stuff. if newGame is clicked, make new Game AND CALL board = new Board() here
+    // have onClick canvas logic here? if so,
 
+    // menu stuff will go here later on
     
 }
 
-export default SetOnline;
+export default Set;

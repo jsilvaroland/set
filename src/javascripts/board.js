@@ -16,11 +16,20 @@ const CARD_COORDS = [
 ];
 
 class Board {
-  constructor(ctx) {
+  constructor(ctx, canvas) {
 		this.ctx = ctx;
+		this.dimensions = { width: canvas.width, height: canvas.height };
+
+		this.board = [];
 		this.deck = new Deck();
+		this.resetCanvas();
 		this.initialDisplayCards();
-  }
+		console.log('board constructed');
+	}
+	
+	resetCanvas() {
+		this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
+	}
 
   displayCard(x, y) { // displays a single card
     const { ctx, deck } = this;
@@ -37,19 +46,22 @@ class Board {
     ctx.quadraticCurveTo(x, y, x + 10, y);
 		this.ctx.stroke();
 
-		const image = deck.deal().image;
-		image.onload = () => {
-			ctx.drawImage(image, x + 30, y + 30); // modify x and y later to center images
+		const card = deck.deal();
+
+		const pos = { x, y };
+		this.board.push({ pos, card });
+
+		card.image.onload = () => {
+			ctx.drawImage(card.image, x + 30, y + 30); // modify x and y later to center images
 		};
   }
 
 	initialDisplayCards() { // displays all 12 cards
 		CARD_COORDS.forEach(coords => {
 			const { x, y } = coords;
-			this.displayCard(x, y); // this just draws card borders
-			
-			// render images at the center of the card x and y coords
+			this.displayCard(x, y);
 		});
+		console.log(this.board);
   }
 }
 

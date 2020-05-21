@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const newGame = document.getElementById("new-game");
     newGame.addEventListener("click", () => {
-      set.drawBoard();
+      set.newGame();
     });
 });
 

@@ -1,4 +1,4 @@
-// import * as Images from '../assets'; // maybe add images to each object?
+import Card from './card';
 
 const ATTRIBUTES = {
 	colors: ['red', 'green', 'purple'],
@@ -10,7 +10,7 @@ const ATTRIBUTES = {
 class Deck {
 	constructor() {
 		// this.deck = [];
-		this.resetDeckExpert();
+		this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
 	}
 
 	repopulateDeckNovice() {
@@ -29,7 +29,7 @@ class Deck {
 	repopulateDeckExpert() {
 		// empties deck if not already empty
 		this.deck = [];
-		let image;
+		let image, card;
 
 		ATTRIBUTES.colors.forEach(color => {
 			ATTRIBUTES.numbers.forEach(number => {
@@ -37,7 +37,9 @@ class Deck {
 					ATTRIBUTES.shadings.forEach(shading => {
 						image = new Image();
 						image.src = `../src/assets/${color}-${number}-${shape}-${shading}.png`;
-						this.deck.push({ color, number, shape, shading, image });
+
+						card = new Card(color, number, shape, shading, image);
+						this.deck.push(card);
 					});
 				});
 			});
