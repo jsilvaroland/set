@@ -17,12 +17,19 @@ class Game {
 
 	handleClick(e) {
 		const clickPos = { x: e.layerX, y: e.layerY };
-		const card = this.findClickedCard(clickPos);
-		
-		if (card) {
-			this.clickedCards.push(card);
+		const clickedCard = this.findClickedCard(clickPos);
+
+		if (clickedCard) {
+			if (this.clickedCards.includes(clickedCard)) { // if card has already been clicked
+				this.clickedCards = this.clickedCards.filter(card => card !== clickedCard);
+				this.board.unhighlight(clickedCard);
+			} else {
+				this.clickedCards.push(clickedCard);
+				this.board.highlight(clickedCard);
+			}
 			this.checkClickedCards();
 		}
+		console.log(this.clickedCards);
 	}
 
 	findClickedCard(clickPos) {
@@ -38,7 +45,7 @@ class Game {
 
 	checkClickedCards() {
 		if (this.clickedCards.length === 3) {
-			console.log('three cards have been clicked');
+			console.log('check if set');
 			// check to see if the 3 clicked cards make a set
 		}
 	}

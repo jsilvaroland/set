@@ -36,7 +36,7 @@ class Deck {
 				ATTRIBUTES.shapes.forEach(shape => {
 					ATTRIBUTES.shadings.forEach(shading => {
 						image = new Image();
-						image.src = `../src/assets/${color}-${number}-${shape}-${shading}.png`;
+						image.src = `./src/assets/${color}-${number}-${shape}-${shading}.png`;
 
 						card = new Card(color, number, shape, shading, image);
 						this.deck.push(card);
