@@ -102,17 +102,14 @@ class Board {
 
 		this.board.push({ pos, card });
 
-		this.drawCardImage(card, pos);
-
-		// card.image.onload = () => {
-		// 	ctx.drawImage(card.image, x + 30, y + 30); // modify x and y later to center images
-		// };
+		
+		card.image.onload = () => {
+			this.drawCardImage(card, pos);
+		};
 	}
 	
 	drawCardImage(card, pos) {
-		card.image.onload = () => {
-			this.ctx.drawImage(card.image, pos.x + 30, pos.y + 30); // modify x and y later to center images
-		};
+		this.ctx.drawImage(card.image, pos.x + 28, pos.y + 25); // modify x and y later to center images
 	}
 
 	initialDisplayCards() { // displays all 12 cards
