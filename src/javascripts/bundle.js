@@ -122,18 +122,27 @@ class Board {
 		this.deck = new _deck__WEBPACK_IMPORTED_MODULE_0__["default"]();
 		this.resetCanvas();
 		this.initialDisplayCards();
-		console.log('board constructed');
+		this.displayDeckCount();
 	}
 	
 	resetCanvas() {
 		this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
 	}
 
+	clearCardArea(x, y) {
+		this.ctx.clearRect(x-3, y-3, 197 + 3, 137 + 3); // clears area
+	}
+
+	removeCard(card) {
+		const i = this.board.indexOf(card);
+		delete this.board[i];
+	}
+
 	highlight(card) {
 		const { ctx } = this;
 		const { x, y } = card.pos;
 
-		ctx.clearRect(x-3, y-3, 197 + 3, 137 + 3); // clears area first
+		this.clearCardArea(x, y);
 		ctx.beginPath();
     ctx.moveTo(x + 10, y);
     ctx.lineTo(x + 185, y);
@@ -157,7 +166,7 @@ class Board {
 		const { ctx } = this;
 		const { x, y } = card.pos;
 
-		ctx.clearRect(x-3, y-3, 197 + 3, 137 + 3);
+		this.clearCardArea(x, y);
 		ctx.beginPath();
     ctx.moveTo(x + 10, y);
     ctx.lineTo(x + 185, y);
@@ -175,6 +184,30 @@ class Board {
 		this.ctx.fill();
 
 		this.drawCardImage(card.card, card.pos);
+	}
+
+	errorHighlight(card) {
+		const { ctx } = this;
+    const { x, y } = card.pos;
+
+    this.clearCardArea(x, y);
+    ctx.beginPath();
+    ctx.moveTo(x + 10, y);
+    ctx.lineTo(x + 185, y);
+    ctx.quadraticCurveTo(x + 195, y, x + 195, y + 10);
+    ctx.lineTo(x + 195, y + 125);
+    ctx.quadraticCurveTo(x + 195, y + 135, x + 185, y + 135);
+    ctx.lineTo(x + 10, y + 135);
+    ctx.quadraticCurveTo(x, y + 135, x, y + 125);
+    ctx.lineTo(x, y + 10);
+    ctx.quadraticCurveTo(x, y, x + 10, y);
+    ctx.strokeStyle = "#959595";
+    ctx.fillStyle = "#FEDDDF";
+    ctx.lineWidth = 3;
+    this.ctx.stroke();
+    this.ctx.fill();
+
+    this.drawCardImage(card.card, card.pos);
 	}
 
   displayCard(x, y) { // displays a single card
@@ -198,12 +231,23 @@ class Board {
 		this.ctx.stroke();
 		this.ctx.fill();
 
-		this.board.push({ pos, card });
-
-		
-		card.image.onload = () => {
+		if (this.board.includes(undefined)) {
+			for (let i = 0; i < this.board.length; i++) {
+				if (typeof this.board[i] == 'undefined') {
+					this.board[i] = { pos, card };
+				}
+			}
 			this.drawCardImage(card, pos);
-		};
+		} else {
+			this.board.push({ pos, card });
+			card.image.onload = () => {
+				this.drawCardImage(card, pos);
+			};
+		}
+		
+		// card.image.onload = () => {
+		// 	this.drawCardImage(card, pos);
+		// };
 	}
 	
 	drawCardImage(card, pos) {
@@ -216,7 +260,19 @@ class Board {
 			this.displayCard(x, y);
 		});
 		console.log(this.board);
-  }
+	}
+	
+	displayDeckCount() {
+		console.log('displaying count');
+		const { ctx } = this;
+		const { deck } = this.deck;
+
+		ctx.clearRect(0, 0, 100, 30);
+		ctx.font = '20px Arial';
+		ctx.fillStyle = '#000000';
+		this.ctx.fillText(`Deck: ${deck.length}`, 50, 20);
+		ctx.fillStyle = '#FFFFFF';
+	}
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Board);
@@ -425,9 +481,124 @@ class Game {
 
 	checkClickedCards() {
 		if (this.clickedCards.length === 3) {
-			console.log('check if set');
-			// check to see if the 3 clicked cards make a set
+			const { clickedCards } = this;
+
+			if(this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
+				console.log('is a set!');
+				let cardPosX;
+				let cardPosY;
+				this.clickedCards.forEach(card => {
+					cardPosX = card.pos.x;
+					cardPosY = card.pos.y;
+					this.board.clearCardArea(cardPosX, cardPosY);
+					this.board.removeCard(card);
+					this.board.displayCard(cardPosX, cardPosY);
+				});
+				console.log(this.board.board);
+				this.board.displayDeckCount();
+				// check if deck is empty and if any sets on board. if not, game over you win!
+			} else {
+				const { board } = this;
+				console.log('not a set');
+				clickedCards.forEach((card) => {
+          this.board.errorHighlight(card);
+          //display message "NOT A SET"
+				});
+				setTimeout(function() {
+					clickedCards.forEach(card => {
+						board.unhighlight(card);
+						// unhighlight THE 3 CARDS, display message "NOT A SET"
+					});
+				}, 250);
+				// add 30 seconds to timer
+			}
+			this.clickedCards = [];
 		}
+	}
+
+	isSet(card1, card2, card3) {
+		let colorReq = false;
+    let numberReq = false;
+    let shapeReq = false;
+    let shadingReq = false;
+
+    // color req
+    if (
+      card1.card.color === card2.card.color &&
+      card2.card.color === card3.card.color
+    ) {
+      console.log("all cards same color");
+      colorReq = true;
+    } else if (
+      card1.card.color !== card2.card.color &&
+      card1.card.color !== card3.card.color &&
+      card2.card.color !== card3.card.color
+    ) {
+      console.log("all cards diff color");
+      colorReq = true;
+    }
+
+    // number req
+    if (
+      card1.card.number === card2.card.number &&
+      card2.card.number === card3.card.number
+    ) {
+      numberReq = true;
+    } else if (
+      card1.card.number !== card2.card.number &&
+      card1.card.number !== card3.card.number &&
+      card2.card.number !== card3.card.number
+    ) {
+      numberReq = true;
+    }
+
+    // shape req
+    if (
+      card1.card.shape === card2.card.shape &&
+      card2.card.shape === card3.card.shape
+    ) {
+      shapeReq = true;
+    } else if (
+      card1.card.shape !== card2.card.shape &&
+      card1.card.shape !== card3.card.shape &&
+      card2.card.shape !== card3.card.shape
+    ) {
+      shapeReq = true;
+    }
+
+    // shading req
+    if (
+      card1.card.shading === card2.card.shading &&
+      card2.card.shading === card3.card.shading
+    ) {
+      shadingReq = true;
+    } else if (
+      card1.card.shading !== card2.card.shading &&
+      card1.card.shading !== card3.card.shading &&
+      card2.card.shading !== card3.card.shading
+    ) {
+      shadingReq = true;
+		}
+		
+		return colorReq && numberReq && shapeReq && shadingReq; // returns true if it's a set
+	}
+
+	anySetsOnBoard() {
+		let { board } = this.board;
+		// iterate through board, all combinations of 3 cards
+		for (let i = 0; i < board.length; i++) {
+			const card1 = board[i];
+			for (let j = i + 1; j < board.length; j++) {
+				const card2 = board[j];
+				for (let k = j + 1; k < board.length; k++) {
+					const card3 = board[k];
+					if (this.isSet(card1, card2, card3)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	increaseTimer() {
