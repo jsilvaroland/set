@@ -123,6 +123,7 @@ class Board {
 		this.resetCanvas();
 		this.initialDisplayCards();
 		this.displayDeckCount();
+		this.displaySetsFound(0);
 	}
 	
 	resetCanvas() {
@@ -263,14 +264,22 @@ class Board {
 	}
 	
 	displayDeckCount() {
-		console.log('displaying count');
 		const { ctx } = this;
 		const { deck } = this.deck;
 
-		ctx.clearRect(0, 0, 100, 30);
+		this.ctx.clearRect(0, 0, 200, 40);
 		ctx.font = '20px Arial';
 		ctx.fillStyle = '#000000';
 		this.ctx.fillText(`Deck: ${deck.length}`, 50, 20);
+		ctx.fillStyle = '#FFFFFF';
+	}
+
+	displaySetsFound(setsFound) {
+		const { ctx } = this;
+
+		this.ctx.clearRect(200, 0, 200, 40);
+		ctx.fillStyle = '#000000';
+		this.ctx.fillText(`Sets found: ${setsFound}`, 200, 20);
 		ctx.fillStyle = '#FFFFFF';
 	}
 }
@@ -440,6 +449,7 @@ class Game {
 	constructor(ctx, canvas) {
 		this.board = new _board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas);
 		this.clickedCards = [];
+		this.setsFound = 0;
 	}
 
 	addGameEventListeners(canvas) {
@@ -484,6 +494,7 @@ class Game {
 			const { clickedCards } = this;
 
 			if(this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
+				this.setsFound++;
 				console.log('is a set!');
 				let cardPosX;
 				let cardPosY;
@@ -496,6 +507,7 @@ class Game {
 				});
 				console.log(this.board.board);
 				this.board.displayDeckCount();
+				this.board.displaySetsFound(this.setsFound);
 				// check if deck is empty and if any sets on board. if not, game over you win!
 			} else {
 				const { board } = this;

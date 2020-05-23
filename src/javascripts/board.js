@@ -25,6 +25,7 @@ class Board {
 		this.resetCanvas();
 		this.initialDisplayCards();
 		this.displayDeckCount();
+		this.displaySetsFound(0);
 	}
 	
 	resetCanvas() {
@@ -165,14 +166,22 @@ class Board {
 	}
 	
 	displayDeckCount() {
-		console.log('displaying count');
 		const { ctx } = this;
 		const { deck } = this.deck;
 
-		ctx.clearRect(0, 0, 100, 30);
+		this.ctx.clearRect(0, 0, 200, 40);
 		ctx.font = '20px Arial';
 		ctx.fillStyle = '#000000';
 		this.ctx.fillText(`Deck: ${deck.length}`, 50, 20);
+		ctx.fillStyle = '#FFFFFF';
+	}
+
+	displaySetsFound(setsFound) {
+		const { ctx } = this;
+
+		this.ctx.clearRect(200, 0, 200, 40);
+		ctx.fillStyle = '#000000';
+		this.ctx.fillText(`Sets found: ${setsFound}`, 200, 20);
 		ctx.fillStyle = '#FFFFFF';
 	}
 }
