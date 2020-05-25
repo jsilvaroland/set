@@ -16,12 +16,12 @@ const CARD_COORDS = [
 ];
 
 class Board {
-  constructor(ctx, canvas) {
+  constructor(ctx, canvas, difficulty) {
 		this.ctx = ctx;
 		this.dimensions = { width: canvas.width, height: canvas.height };
 
 		this.board = [];
-		this.deck = new Deck();
+		this.deck = new Deck(difficulty);
 		this.resetCanvas();
 		this.initialDisplayCards();
 		this.displayDeckCount();
@@ -142,6 +142,7 @@ class Board {
 			}
 			this.drawCardImage(card, pos);
 		} else {
+			debugger;
 			this.board.push({ pos, card });
 			card.image.onload = () => {
 				this.drawCardImage(card, pos);

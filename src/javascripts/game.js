@@ -1,10 +1,11 @@
 import Board from './board';
 
 class Game {
-	constructor(ctx, canvas) {
-		this.board = new Board(ctx, canvas);
+	constructor(ctx, canvas, difficulty) {
+		this.board = new Board(ctx, canvas, difficulty);
 		this.clickedCards = [];
 		this.setsFound = 0;
+		this.difficulty = difficulty;
 	}
 
 	addGameEventListeners(canvas) {

@@ -114,12 +114,12 @@ const CARD_COORDS = [
 ];
 
 class Board {
-  constructor(ctx, canvas) {
+  constructor(ctx, canvas, difficulty) {
 		this.ctx = ctx;
 		this.dimensions = { width: canvas.width, height: canvas.height };
 
 		this.board = [];
-		this.deck = new _deck__WEBPACK_IMPORTED_MODULE_0__["default"]();
+		this.deck = new _deck__WEBPACK_IMPORTED_MODULE_0__["default"](difficulty);
 		this.resetCanvas();
 		this.initialDisplayCards();
 		this.displayDeckCount();
@@ -240,6 +240,7 @@ class Board {
 			}
 			this.drawCardImage(card, pos);
 		} else {
+			debugger;
 			this.board.push({ pos, card });
 			card.image.onload = () => {
 				this.drawCardImage(card, pos);
@@ -332,19 +333,28 @@ const ATTRIBUTES = {
 };
 
 class Deck {
-	constructor() {
-		// this.deck = [];
-		this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
+	constructor(difficulty) {
+		if (difficulty === 'expert') {
+			this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
+		} else {
+			this.resetDeckNovice();
+		}
 	}
 
 	repopulateDeckNovice() {
 	// empties deck if not already empty
 		this.deck = [];
+		let image, card;
+		let shading = { shading: 'solid' };
 
 		ATTRIBUTES.colors.forEach(color => {
 			ATTRIBUTES.numbers.forEach(number => {
 				ATTRIBUTES.shapes.forEach(shape => {
-					this.deck.push({ color, number, shape, shading: 'solid' });
+					image = new Image();
+					image.src = `./src/assets/${color}-${number}-${shape}-solid.png`;
+
+					card = new _card__WEBPACK_IMPORTED_MODULE_0__["default"](color, number, shape, shading, image);
+					this.deck.push(card);
 				});
 			});
 		});
@@ -417,11 +427,16 @@ __webpack_require__.r(__webpack_exports__);
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById("set-game");
-    const set = new _set__WEBPACK_IMPORTED_MODULE_0__["default"](canvas); // change this to new Set (from future set.js), later only create new Game when new game button inside menu is clicked
+    const set = new _set__WEBPACK_IMPORTED_MODULE_0__["default"](canvas);
     
-    const newGame = document.getElementById("new-game");
-    newGame.addEventListener("click", () => {
-      set.newGame();
+    const newGameNovice = document.getElementById("new-game-novice");
+    newGameNovice.addEventListener("click", () => {
+      set.newGameNovice();
+    });
+
+    const newGameExpert = document.getElementById("new-game-expert");
+    newGameExpert.addEventListener("click", () => {
+      set.newGameExpert();
     });
 });
 
@@ -446,10 +461,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Game {
-	constructor(ctx, canvas) {
-		this.board = new _board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas);
+	constructor(ctx, canvas, difficulty) {
+		this.board = new _board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas, difficulty);
 		this.clickedCards = [];
 		this.setsFound = 0;
+		this.difficulty = difficulty;
 	}
 
 	addGameEventListeners(canvas) {
@@ -635,26 +651,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Set {
-    constructor(canvas) {
-        this.ctx = canvas.getContext("2d");
-        this.canvas = canvas;
-        this.dimensions = { width: canvas.width, height: canvas.height };
-    }
+  constructor(canvas) {
+    this.ctx = canvas.getContext("2d");
+    this.canvas = canvas;
+    this.dimensions = { width: canvas.width, height: canvas.height };
+  }
 
-    newGame() {
-        if (this.game) {
-            console.log('clearing prev game event listeners');
-            this.game.removeGameEventListeners(this.canvas);
-        }
-        this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas);
-        this.game.addGameEventListeners(this.canvas);
-        
-        // remove menu onClicks
+  newGameExpert() {
+    if (this.game) {
+      this.game.removeGameEventListeners(this.canvas);
     }
-    
+    this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, 'expert');
+    this.game.addGameEventListeners(this.canvas);
 
-    // menu stuff will go here later on
-    
+    // remove menu onClicks
+  }
+
+  newGameNovice() {
+    if (this.game) {
+      this.game.removeGameEventListeners(this.canvas);
+    }
+    this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, 'novice');
+    this.game.addGameEventListeners(this.canvas);
+
+    // remove menu onClicks
+  }
+
+  // menu stuff will go here later on
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Set);

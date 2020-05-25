@@ -8,19 +8,28 @@ const ATTRIBUTES = {
 };
 
 class Deck {
-	constructor() {
-		// this.deck = [];
-		this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
+	constructor(difficulty) {
+		if (difficulty === 'expert') {
+			this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
+		} else {
+			this.resetDeckNovice();
+		}
 	}
 
 	repopulateDeckNovice() {
 	// empties deck if not already empty
 		this.deck = [];
+		let image, card;
+		let shading = { shading: 'solid' };
 
 		ATTRIBUTES.colors.forEach(color => {
 			ATTRIBUTES.numbers.forEach(number => {
 				ATTRIBUTES.shapes.forEach(shape => {
-					this.deck.push({ color, number, shape, shading: 'solid' });
+					image = new Image();
+					image.src = `./src/assets/${color}-${number}-${shape}-solid.png`;
+
+					card = new Card(color, number, shape, shading, image);
+					this.deck.push(card);
 				});
 			});
 		});

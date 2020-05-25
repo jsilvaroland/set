@@ -5,11 +5,16 @@ import Set from './set';
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById("set-game");
-    const set = new Set(canvas); // change this to new Set (from future set.js), later only create new Game when new game button inside menu is clicked
+    const set = new Set(canvas);
     
-    const newGame = document.getElementById("new-game");
-    newGame.addEventListener("click", () => {
-      set.newGame();
+    const newGameNovice = document.getElementById("new-game-novice");
+    newGameNovice.addEventListener("click", () => {
+      set.newGameNovice();
+    });
+
+    const newGameExpert = document.getElementById("new-game-expert");
+    newGameExpert.addEventListener("click", () => {
+      set.newGameExpert();
     });
 });
 
