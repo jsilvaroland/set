@@ -142,7 +142,6 @@ class Board {
 			}
 			this.drawCardImage(card, pos);
 		} else {
-			debugger;
 			this.board.push({ pos, card });
 			card.image.onload = () => {
 				this.drawCardImage(card, pos);

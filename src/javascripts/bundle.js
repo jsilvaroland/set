@@ -240,7 +240,6 @@ class Board {
 			}
 			this.drawCardImage(card, pos);
 		} else {
-			debugger;
 			this.board.push({ pos, card });
 			card.image.onload = () => {
 				this.drawCardImage(card, pos);
@@ -497,12 +496,16 @@ class Game {
 	findClickedCard(clickPos) {
 		let { board } = this.board;
 
-		return board.find(card => (
-			clickPos.x >= card.pos.x &&
-			clickPos.x < card.pos.x + 197 &&
-			clickPos.y >= card.pos.y &&
-			clickPos.y < card.pos.y + 137
-		));
+		return board.find(card => {
+			if (card) {
+				return (
+					clickPos.x >= card.pos.x &&
+					clickPos.x < card.pos.x + 197 &&
+					clickPos.y >= card.pos.y &&
+					clickPos.y < card.pos.y + 137
+				);
+			}
+		});
 	}
 
 	checkClickedCards() {
@@ -510,38 +513,61 @@ class Game {
 			const { clickedCards } = this;
 
 			if(this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
-				this.setsFound++;
-				console.log('is a set!');
-				let cardPosX;
-				let cardPosY;
-				this.clickedCards.forEach(card => {
-					cardPosX = card.pos.x;
-					cardPosY = card.pos.y;
-					this.board.clearCardArea(cardPosX, cardPosY);
-					this.board.removeCard(card);
-					this.board.displayCard(cardPosX, cardPosY);
-				});
-				console.log(this.board.board);
-				this.board.displayDeckCount();
-				this.board.displaySetsFound(this.setsFound);
-				// check if deck is empty and if any sets on board. if not, game over you win!
+				this.setFound();
 			} else {
-				const { board } = this;
-				console.log('not a set');
-				clickedCards.forEach((card) => {
-          this.board.errorHighlight(card);
-          //display message "NOT A SET"
-				});
-				setTimeout(function() {
-					clickedCards.forEach(card => {
-						board.unhighlight(card);
-						// unhighlight THE 3 CARDS, display message "NOT A SET"
-					});
-				}, 250);
-				// add 30 seconds to timer
+				this.notASet();
 			}
 			this.clickedCards = [];
 		}
+	}
+
+	setFound() {
+		this.setsFound++;
+		console.log('is a set!');
+		let cardPosX, cardPosY;
+		this.clickedCards.forEach(card => {
+			cardPosX = card.pos.x;
+			cardPosY = card.pos.y;
+			this.board.clearCardArea(cardPosX, cardPosY);
+			this.board.removeCard(card);
+			// if deck has cards left, displayCard
+			if (this.board.deck.deck.length) {
+				this.board.displayCard(cardPosX, cardPosY);
+			}
+		});
+		console.log(this.board.board);
+		this.board.displayDeckCount();
+		this.board.displaySetsFound(this.setsFound);
+		// check if deck is empty and if any sets on board. if not, game over you win!
+		
+		if (this.isBoardEmpty() || (this.isDeckEmpty() && !this.anySetsOnBoard())) {
+			console.log("you win");
+    }
+	}
+
+	isDeckEmpty() {
+		return !this.board.deck.deck.length;
+	}
+
+	isBoardEmpty() {
+		return !this.board.board.some(card => card);
+	}
+
+	notASet() {
+		const { board, clickedCards } = this;
+
+		console.log('not a set');
+		clickedCards.forEach((card) => {
+			this.board.errorHighlight(card);
+			//display message "NOT A SET"
+		});
+		setTimeout(function() {
+			clickedCards.forEach(card => {
+				board.unhighlight(card);
+				// unhighlight THE 3 CARDS, display message "NOT A SET"
+			});
+		}, 250);
+		// add 30 seconds to timer
 	}
 
 	isSet(card1, card2, card3) {
@@ -620,7 +646,10 @@ class Game {
 				const card2 = board[j];
 				for (let k = j + 1; k < board.length; k++) {
 					const card3 = board[k];
-					if (this.isSet(card1, card2, card3)) {
+					if (!card1 || !card2 || !card3) {
+						console.log('spot is empty');
+						continue;
+					} else if (this.isSet(card1, card2, card3)) {
 						return true;
 					}
 				}
