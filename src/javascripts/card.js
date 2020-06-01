@@ -5,7 +5,8 @@ class Card {
         this.shape = shape;
         this.shading = shading;
         this.image = image;
-        this.highlighted = false;
+        this.width = 195;
+        this.height = 135;
     }
 }
 

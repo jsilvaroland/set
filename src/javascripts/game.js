@@ -9,19 +9,22 @@ class Game {
 	}
 
 	addGameEventListeners(canvas) {
-		this.callback = e => this.handleClick(e);
-		canvas.addEventListener('click', this.callback);
+		this.clickCallback = e => this.handleClick(e);
+		this.mousedownCallback = e => this.handleMousedown(e);
+		canvas.addEventListener('click', this.clickCallback);
+		canvas.addEventListener('mousedown', this.mousedownCallback);
 	}
 
 	removeGameEventListeners(canvas) {
-		canvas.removeEventListener('click', this.callback);
+		canvas.removeEventListener('click', this.clickCallback);
+		canvas.removeEventListener('mousedown', this.mousedownCallback);
 	}
 
 	handleClick(e) {
 		const clickPos = { x: e.layerX, y: e.layerY };
 		const clickedCard = this.findClickedCard(clickPos);
 
-		if (clickedCard) {
+		if (clickedCard) { // if a card was clicked
 			if (this.clickedCards.includes(clickedCard)) { // if card has already been clicked
 				this.clickedCards = this.clickedCards.filter(card => card !== clickedCard);
 				this.board.unhighlight(clickedCard);
@@ -32,6 +35,34 @@ class Game {
 			this.checkClickedCards();
 		}
 		console.log(this.clickedCards);
+	}
+
+	handleMousedown(e) { // finds the button that was clicked
+		const mousedownPos = { x: e.layerX, y: e.layerY };
+		
+		if (
+			mousedownPos.x >= 400 &&
+			mousedownPos.x < 400 + 108 &&
+			mousedownPos.y >= 15 &&
+			mousedownPos.y < 15 + 37
+		) {
+			this.handleMousedownFindSet();
+		} else if (
+			mousedownPos.x >= 528 &&
+			mousedownPos.x < 528 + 143 &&
+			mousedownPos.y >= 15 &&
+			mousedownPos.y < 15 + 37
+		) {
+			this.handleMousedownAdd3Cards();
+		}
+	}
+
+	handleMousedownFindSet() {
+		console.log('find set');
+	}
+
+	handleMousedownAdd3Cards() {
+		console.log('add 3 cards');
 	}
 
 	findClickedCard(clickPos) {
@@ -179,7 +210,7 @@ class Game {
 		return colorReq && numberReq && shapeReq && shadingReq; // returns true if it's a set
 	}
 
-	anySetsOnBoard() {
+	anySetsOnBoard(arg) {
 		let { board } = this.board;
 		// iterate through board, all combinations of 3 cards
 		for (let i = 0; i < board.length; i++) {
@@ -192,12 +223,22 @@ class Game {
 						console.log('spot is empty');
 						continue;
 					} else if (this.isSet(card1, card2, card3)) {
+						if (arg) {
+							console.log('call find a set');
+							this.board.highlight(card1);
+							this.board.highlight(card2);
+							this.board.highlight(card3);
+						}
 						return true;
 					}
 				}
 			}
 		}
 		return false;
+	}
+
+	findSet() {
+		anySetsOnBoard(true);
 	}
 
 	increaseTimer() {

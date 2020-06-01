@@ -96,205 +96,216 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _deck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./deck */ "./src/javascripts/deck.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button */ "./src/javascripts/button.js");
+
 
 
 const CARD_COORDS = [
-	{ x: 50, y: 50 },
-	{ x: 262, y: 50 },
-	{ x: 474, y: 50 },
-	{ x: 50, y: 202 },
-	{ x: 262, y: 202 },
-	{ x: 474, y: 202 },
-	{ x: 50, y: 354 },
-	{ x: 262, y: 354 },
-	{ x: 474, y: 354 },
-	{ x: 50, y: 507 },
-	{ x: 262, y: 507 },
-	{ x: 474, y: 507 }
+	{ x: 50, y: 100 },
+	{ x: 262, y: 100 },
+	{ x: 474, y: 100 },
+	{ x: 50, y: 252 },
+	{ x: 262, y: 252 },
+	{ x: 474, y: 252 },
+	{ x: 50, y: 404 },
+	{ x: 262, y: 404 },
+	{ x: 474, y: 404 },
+	{ x: 50, y: 557 },
+	{ x: 262, y: 557 },
+	{ x: 474, y: 557 }
 ];
 
 class Board {
   constructor(ctx, canvas, difficulty) {
-		this.ctx = ctx;
-		this.dimensions = { width: canvas.width, height: canvas.height };
+    this.ctx = ctx;
+    this.dimensions = { width: canvas.width, height: canvas.height };
 
-		this.board = [];
+    this.board = [];
 		this.deck = new _deck__WEBPACK_IMPORTED_MODULE_0__["default"](difficulty);
-		this.resetCanvas();
-		this.initialDisplayCards();
-		this.displayDeckCount();
+		this.findSetButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](400, 15, 106, 35);
+		this.add3CardsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](528, 15, 141, 35);
+    this.resetCanvas();
+    this.initialDisplayCards();
+    this.displayDeckCount();
 		this.displaySetsFound(0);
+    this.displayFindSet(); // can change these coordinates to move button
+    this.displayAdd3Cards(); // can change these coordinates to move button
+  }
+
+  resetCanvas() {
+    this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
 	}
 	
-	resetCanvas() {
-		this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
-	}
-
-	clearCardArea(x, y) {
-		this.ctx.clearRect(x-3, y-3, 197 + 3, 137 + 3); // clears area
-	}
-
-	removeCard(card) {
-		const i = this.board.indexOf(card);
-		delete this.board[i];
-	}
-
-	highlight(card) {
+	drawRoundedRect(x, y, width, height, strokeStyle, fillStyle) {
 		const { ctx } = this;
-		const { x, y } = card.pos;
 
-		this.clearCardArea(x, y);
 		ctx.beginPath();
     ctx.moveTo(x + 10, y);
-    ctx.lineTo(x + 185, y);
-    ctx.quadraticCurveTo(x + 195, y, x + 195, y + 10);
-    ctx.lineTo(x + 195, y + 125);
-    ctx.quadraticCurveTo(x + 195, y + 135, x + 185, y + 135);
-    ctx.lineTo(x + 10, y + 135);
-    ctx.quadraticCurveTo(x, y + 135, x, y + 125);
+    ctx.lineTo(x + width - 10, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + 10);
+    ctx.lineTo(x + width, y + height - 10);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - 10, y + height);
+    ctx.lineTo(x + 10, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - 10);
     ctx.lineTo(x, y + 10);
     ctx.quadraticCurveTo(x, y, x + 10, y);
-		ctx.strokeStyle = "#959595";
-		ctx.fillStyle = "#DDEFFE";
-		ctx.lineWidth = 3; // maybe change this
-		this.ctx.stroke();
-		this.ctx.fill();
-
-		this.drawCardImage(card.card, card.pos);
-	}
-
-	unhighlight(card) {
-		const { ctx } = this;
-		const { x, y } = card.pos;
-
-		this.clearCardArea(x, y);
-		ctx.beginPath();
-    ctx.moveTo(x + 10, y);
-    ctx.lineTo(x + 185, y);
-    ctx.quadraticCurveTo(x + 195, y, x + 195, y + 10);
-    ctx.lineTo(x + 195, y + 125);
-    ctx.quadraticCurveTo(x + 195, y + 135, x + 185, y + 135);
-    ctx.lineTo(x + 10, y + 135);
-    ctx.quadraticCurveTo(x, y + 135, x, y + 125);
-    ctx.lineTo(x, y + 10);
-		ctx.quadraticCurveTo(x, y, x + 10, y);
-		ctx.strokeStyle = "#959595";
-		ctx.fillStyle = "#FFFFFF";
-		ctx.lineWidth = 3;
-		this.ctx.stroke();
-		this.ctx.fill();
-
-		this.drawCardImage(card.card, card.pos);
-	}
-
-	errorHighlight(card) {
-		const { ctx } = this;
-    const { x, y } = card.pos;
-
-    this.clearCardArea(x, y);
-    ctx.beginPath();
-    ctx.moveTo(x + 10, y);
-    ctx.lineTo(x + 185, y);
-    ctx.quadraticCurveTo(x + 195, y, x + 195, y + 10);
-    ctx.lineTo(x + 195, y + 125);
-    ctx.quadraticCurveTo(x + 195, y + 135, x + 185, y + 135);
-    ctx.lineTo(x + 10, y + 135);
-    ctx.quadraticCurveTo(x, y + 135, x, y + 125);
-    ctx.lineTo(x, y + 10);
-    ctx.quadraticCurveTo(x, y, x + 10, y);
-    ctx.strokeStyle = "#959595";
-    ctx.fillStyle = "#FEDDDF";
+    ctx.strokeStyle = strokeStyle;
+    ctx.fillStyle = fillStyle;
     ctx.lineWidth = 3;
     this.ctx.stroke();
     this.ctx.fill();
+	}
 
+  clearCardArea(x, y) {
+    this.ctx.clearRect(x - 3, y - 3, 197 + 3, 137 + 3); // clears area
+  }
+
+  removeCard(card) {
+    const i = this.board.indexOf(card);
+    delete this.board[i];
+  }
+
+  highlight(card) {
+		const { x, y } = card.pos;
+		const { width, height } = card.card;
+
+		this.clearCardArea(x, y);
+		this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
     this.drawCardImage(card.card, card.pos);
-	}
+  }
 
-  displayCard(x, y) { // displays a single card
-    const { ctx, deck } = this;
-		const card = deck.deal();
-		const pos = { x, y };
+  unhighlight(card) {
+		const { x, y } = card.pos;
+		const { width, height } = card.card;
 
-    ctx.beginPath();
-    ctx.moveTo(x + 10, y);
-    ctx.lineTo(x + 185, y);
-    ctx.quadraticCurveTo(x + 195, y, x + 195, y + 10);
-    ctx.lineTo(x + 195, y + 125);
-    ctx.quadraticCurveTo(x + 195, y + 135, x + 185, y + 135);
-    ctx.lineTo(x + 10, y + 135);
-    ctx.quadraticCurveTo(x, y + 135, x, y + 125);
-    ctx.lineTo(x, y + 10);
-		ctx.quadraticCurveTo(x, y, x + 10, y);
-		ctx.strokeStyle = "#959595";
-		ctx.fillStyle = "#FFFFFF";
-		ctx.lineWidth = 3;
-		this.ctx.stroke();
-		this.ctx.fill();
+		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+    this.drawCardImage(card.card, card.pos);
+  }
 
-		if (this.board.includes(undefined)) {
-			for (let i = 0; i < this.board.length; i++) {
-				if (typeof this.board[i] == 'undefined') {
-					this.board[i] = { pos, card };
-				}
-			}
-			this.drawCardImage(card, pos);
-		} else {
-			this.board.push({ pos, card });
-			card.image.onload = () => {
-				this.drawCardImage(card, pos);
-			};
-		}
+  errorHighlight(card) {
+		const { x, y } = card.pos;
+		const { width, height } = card.card;
 		
-		// card.image.onload = () => {
-		// 	this.drawCardImage(card, pos);
-		// };
-	}
-	
-	drawCardImage(card, pos) {
-		this.ctx.drawImage(card.image, pos.x + 28, pos.y + 25); // modify x and y later to center images
-	}
+    this.clearCardArea(x, y);
+		this.drawRoundedRect(x, y, width, height, "#959595", "#FEDDDF");
+    this.drawCardImage(card.card, card.pos);
+  }
 
-	initialDisplayCards() { // displays all 12 cards
-		CARD_COORDS.forEach(coords => {
-			const { x, y } = coords;
-			this.displayCard(x, y);
-		});
-		console.log(this.board);
-	}
-	
-	displayDeckCount() {
+  displayCard(x, y) {
+		const card = this.deck.deal();
+		const { width, height } = card;
+		const pos = { x, y };
+		
+		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+
+    if (this.board.includes(undefined)) {
+      for (let i = 0; i < this.board.length; i++) {
+        if (typeof this.board[i] == "undefined") {
+          this.board[i] = { pos, card };
+        }
+      }
+      this.drawCardImage(card, pos);
+    } else {
+      this.board.push({ pos, card });
+      card.image.onload = () => {
+        this.drawCardImage(card, pos);
+      };
+    }
+
+    // card.image.onload = () => {
+    // 	this.drawCardImage(card, pos);
+    // };
+  }
+
+  drawCardImage(card, pos) {
+    this.ctx.drawImage(card.image, pos.x + 28, pos.y + 25);
+  }
+
+  initialDisplayCards() {
+    // displays all 12 cards
+    CARD_COORDS.forEach((coords) => {
+      const { x, y } = coords;
+      this.displayCard(x, y);
+    });
+    console.log(this.board);
+  }
+
+  displayDeckCount() {
+    const { ctx } = this;
+    const { deck } = this.deck;
+
+    this.ctx.clearRect(0, 0, 160, 50);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`Deck: ${deck.length}`, 50, 40);
+    ctx.fillStyle = "#FFFFFF";
+  }
+
+  displaySetsFound(setsFound) {
+    const { ctx } = this;
+
+    this.ctx.clearRect(160, 0, 160, 50);
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`Sets Found: ${setsFound}`, 165, 40);
+    ctx.fillStyle = "#FFFFFF";
+  }
+
+  displayFindSet() {
 		const { ctx } = this;
-		const { deck } = this.deck;
+		const { x, y, width, height } = this.findSetButton;
 
-		this.ctx.clearRect(0, 0, 200, 40);
-		ctx.font = '20px Arial';
-		ctx.fillStyle = '#000000';
-		this.ctx.fillText(`Deck: ${deck.length}`, 50, 20);
-		ctx.fillStyle = '#FFFFFF';
-	}
+		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
-	displaySetsFound(setsFound) {
-		const { ctx } = this;
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`Find Set`, x + 15, y + 25);
+    ctx.fillStyle = "#FFFFFF";
+  }
 
-		this.ctx.clearRect(200, 0, 200, 40);
-		ctx.fillStyle = '#000000';
-		this.ctx.fillText(`Sets Found: ${setsFound}`, 200, 20);
-		ctx.fillStyle = '#FFFFFF';
-	}
+  displayAdd3Cards() {
+    const { ctx } = this;
+		const { x, y, width, height } = this.add3CardsButton;
+		
+		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
-	drawWin() {
-		const { ctx } = this;
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
+    ctx.fillStyle = "#FFFFFF";
+  }
 
-		ctx.font = '100px Arial';
-		ctx.fillStyle = "#000000";
-		this.ctx.fillText(`You Win!`, 250, 400);
-		// change these coordinates later
-		ctx.fillStyle = "#FFFFFF";
-	}
+  drawWin() {
+    const { ctx } = this;
+
+    ctx.font = "100px Arial";
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`You Win!`, 250, 400);
+    // change these coordinates later
+    ctx.fillStyle = "#FFFFFF";
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Board);
+
+/***/ }),
+
+/***/ "./src/javascripts/button.js":
+/*!***********************************!*\
+  !*** ./src/javascripts/button.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+class Button {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Button);
 
 /***/ }),
 
@@ -314,7 +325,8 @@ class Card {
         this.shape = shape;
         this.shading = shading;
         this.image = image;
-        this.highlighted = false;
+        this.width = 195;
+        this.height = 135;
     }
 }
 
@@ -478,19 +490,22 @@ class Game {
 	}
 
 	addGameEventListeners(canvas) {
-		this.callback = e => this.handleClick(e);
-		canvas.addEventListener('click', this.callback);
+		this.clickCallback = e => this.handleClick(e);
+		this.mousedownCallback = e => this.handleMousedown(e);
+		canvas.addEventListener('click', this.clickCallback);
+		canvas.addEventListener('mousedown', this.mousedownCallback);
 	}
 
 	removeGameEventListeners(canvas) {
-		canvas.removeEventListener('click', this.callback);
+		canvas.removeEventListener('click', this.clickCallback);
+		canvas.removeEventListener('mousedown', this.mousedownCallback);
 	}
 
 	handleClick(e) {
 		const clickPos = { x: e.layerX, y: e.layerY };
 		const clickedCard = this.findClickedCard(clickPos);
 
-		if (clickedCard) {
+		if (clickedCard) { // if a card was clicked
 			if (this.clickedCards.includes(clickedCard)) { // if card has already been clicked
 				this.clickedCards = this.clickedCards.filter(card => card !== clickedCard);
 				this.board.unhighlight(clickedCard);
@@ -501,6 +516,34 @@ class Game {
 			this.checkClickedCards();
 		}
 		console.log(this.clickedCards);
+	}
+
+	handleMousedown(e) { // finds the button that was clicked
+		const mousedownPos = { x: e.layerX, y: e.layerY };
+		
+		if (
+			mousedownPos.x >= 400 &&
+			mousedownPos.x < 400 + 108 &&
+			mousedownPos.y >= 15 &&
+			mousedownPos.y < 15 + 37
+		) {
+			this.handleMousedownFindSet();
+		} else if (
+			mousedownPos.x >= 528 &&
+			mousedownPos.x < 528 + 143 &&
+			mousedownPos.y >= 15 &&
+			mousedownPos.y < 15 + 37
+		) {
+			this.handleMousedownAdd3Cards();
+		}
+	}
+
+	handleMousedownFindSet() {
+		console.log('find set');
+	}
+
+	handleMousedownAdd3Cards() {
+		console.log('add 3 cards');
 	}
 
 	findClickedCard(clickPos) {
@@ -648,7 +691,7 @@ class Game {
 		return colorReq && numberReq && shapeReq && shadingReq; // returns true if it's a set
 	}
 
-	anySetsOnBoard() {
+	anySetsOnBoard(arg) {
 		let { board } = this.board;
 		// iterate through board, all combinations of 3 cards
 		for (let i = 0; i < board.length; i++) {
@@ -661,12 +704,22 @@ class Game {
 						console.log('spot is empty');
 						continue;
 					} else if (this.isSet(card1, card2, card3)) {
+						if (arg) {
+							console.log('call find a set');
+							this.board.highlight(card1);
+							this.board.highlight(card2);
+							this.board.highlight(card3);
+						}
 						return true;
 					}
 				}
 			}
 		}
 		return false;
+	}
+
+	findSet() {
+		anySetsOnBoard(true);
 	}
 
 	increaseTimer() {
