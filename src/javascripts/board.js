@@ -181,8 +181,18 @@ class Board {
 
 		this.ctx.clearRect(200, 0, 200, 40);
 		ctx.fillStyle = '#000000';
-		this.ctx.fillText(`Sets found: ${setsFound}`, 200, 20);
+		this.ctx.fillText(`Sets Found: ${setsFound}`, 200, 20);
 		ctx.fillStyle = '#FFFFFF';
+	}
+
+	drawWin() {
+		const { ctx } = this;
+
+		ctx.font = '100px Arial';
+		ctx.fillStyle = "#000000";
+		this.ctx.fillText(`You Win!`, 250, 400);
+		// change these coordinates later
+		ctx.fillStyle = "#FFFFFF";
 	}
 }
 

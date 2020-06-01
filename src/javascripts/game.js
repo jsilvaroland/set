@@ -83,6 +83,7 @@ class Game {
 		
 		if (this.isBoardEmpty() || (this.isDeckEmpty() && !this.anySetsOnBoard())) {
 			console.log("you win");
+			this.win();
     }
 	}
 
@@ -201,6 +202,10 @@ class Game {
 
 	increaseTimer() {
 		// increases timer, likely will call within newGame
+	}
+
+	win() {
+		this.board.drawWin();
 	}
 }
 
