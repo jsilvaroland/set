@@ -176,15 +176,7 @@ class Game {
   }
 
   setFound() {
-    const {
-      clickedCards,
-			board,
-      isBoardEmpty,
-      isDeckEmpty,
-      anySetsOnBoard,
-      win,
-			isSet,
-    } = this;
+    const { clickedCards, board } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
 		console.log("is a set!");
@@ -204,24 +196,21 @@ class Game {
       });
       console.log(board.board);
       board.displayDeckCount();
-      // board.displaySetsFound(setsFound);
-      // check if deck is empty and if any sets on board. if not, game over you win!
-
       if (
-        isBoardEmpty(board) ||
-        (isDeckEmpty(board) && !anySetsOnBoard(board, isSet))
+        this.isBoardEmpty.call(this) ||
+        (this.isDeckEmpty.call(this) && !this.anySetsOnBoard.call(this))
       ) {
-        win(board);
+        this.win.call(this);
       }
-    }, 250);
+		}.bind(this), 250);
   }
 
-  isDeckEmpty(board) {
-    return !board.deck.deck.length;
+  isDeckEmpty() {
+    return !this.board.deck.deck.length;
   }
 
-  isBoardEmpty(board) {
-    return !board.board.some((card) => card);
+  isBoardEmpty() {
+    return !this.board.board.some((card) => card);
   }
 
   notASet() {
@@ -305,7 +294,8 @@ class Game {
     return colorReq && numberReq && shapeReq && shadingReq; // returns true if it's a set
   }
 
-  anySetsOnBoard(board, isSet) {
+  anySetsOnBoard() {
+		const { board } = this;
     // iterate through board, all combinations of 3 cards
     for (let i = 0; i < board.board.length; i++) {
       const card1 = board.board[i];
@@ -315,7 +305,7 @@ class Game {
           const card3 = board.board[k];
           if (!card1 || !card2 || !card3) { // if the spot on the board is empty
             continue;
-          } else if (isSet(card1, card2, card3)) {
+          } else if (this.isSet(card1, card2, card3)) {
             this.setOnBoard = [card1, card2, card3];
             return true;
           }
@@ -329,8 +319,8 @@ class Game {
     // increases timer, likely will call within newGame
   }
 
-  win(board) {
-		board.drawWin();
+  win() {
+		this.board.drawWin();
   }
 }
 
