@@ -311,9 +311,11 @@ class Board {
   drawWin() {
     const { ctx } = this;
 
-    ctx.font = "100px Arial";
+		this.drawRoundedRect(165 - 73, 400 - 48 - 73, 389 + (73 * 2), 73 + (48 * 2), "#959595", "#FFFFFF");
+
+		ctx.font = "100px Arial";
     ctx.fillStyle = "#000000";
-    this.ctx.fillText(`You Win!`, 250, 400);
+    this.ctx.fillText(`You Win!`, 165, 400);
 		// change these coordinates later
 		ctx.font = "20px Arial";
     ctx.fillStyle = "#FFFFFF";
@@ -516,11 +518,14 @@ document.addEventListener('DOMContentLoaded', () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./board */ "./src/javascripts/board.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./src/javascripts/util.js");
+
 
 
 class Game {
   constructor(ctx, canvas, difficulty) {
-    this.board = new _board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas, difficulty);
+		this.board = new _board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas, difficulty);
+		this.canvas = canvas;
     this.clickedCards = [];
     this.setOnBoard = [];
     this.setsFound = 0;
@@ -529,11 +534,15 @@ class Game {
 
   addGameEventListeners(canvas) {
     this.clickCallback = (e) => this.handleClick(e);
-    this.buttonClickCallback = (e) => this.handleButtonClick(e);
+    // this.buttonClickCallback = (e) => this.handleButtonClick(e);
     this.mousedownCallback = (e) => this.handleMousedown(e);
     this.mouseupCallback = (e) => this.handleMouseup(e);
     canvas.addEventListener("click", this.clickCallback);
-    canvas.addEventListener("click", this.buttonClickCallback);
+		// canvas.addEventListener("click", this.buttonClickCallback);
+		canvas.addEventListener("click", Object(_util__WEBPACK_IMPORTED_MODULE_1__["throttle"])(e => {
+			this.handleButtonClick(e);
+		}, 1000));
+		
     canvas.addEventListener("mousedown", this.mousedownCallback);
     canvas.addEventListener("mouseup", this.mouseupCallback);
   }
@@ -699,13 +708,13 @@ class Game {
   setFound() {
     const {
       clickedCards,
-      board,
+			board,
+      setsFound,
       isBoardEmpty,
       isDeckEmpty,
       anySetsOnBoard,
       win,
-      setsFound,
-      isSet,
+			isSet,
     } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
@@ -732,7 +741,7 @@ class Game {
         isBoardEmpty(board) ||
         (isDeckEmpty(board) && !anySetsOnBoard(board, isSet))
       ) {
-        console.log("You win!");
+				console.log("You win!");
         win(board);
       }
     }, 250);
@@ -857,7 +866,7 @@ class Game {
   }
 
   win(board) {
-    board.drawWin();
+		board.drawWin();
   }
 }
 
@@ -908,6 +917,31 @@ class Set {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Set);
+
+/***/ }),
+
+/***/ "./src/javascripts/util.js":
+/*!*********************************!*\
+  !*** ./src/javascripts/util.js ***!
+  \*********************************/
+/*! exports provided: throttle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "throttle", function() { return throttle; });
+const throttle = (func, limit) => {
+  let inThrottle;
+  return function () {
+    const args = arguments, context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+};
+
 
 /***/ })
 

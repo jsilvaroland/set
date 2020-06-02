@@ -1,8 +1,10 @@
 import Board from './board';
+import { throttle } from './util';
 
 class Game {
   constructor(ctx, canvas, difficulty) {
-    this.board = new Board(ctx, canvas, difficulty);
+		this.board = new Board(ctx, canvas, difficulty);
+		this.canvas = canvas;
     this.clickedCards = [];
     this.setOnBoard = [];
     this.setsFound = 0;
@@ -11,11 +13,15 @@ class Game {
 
   addGameEventListeners(canvas) {
     this.clickCallback = (e) => this.handleClick(e);
-    this.buttonClickCallback = (e) => this.handleButtonClick(e);
+    // this.buttonClickCallback = (e) => this.handleButtonClick(e);
     this.mousedownCallback = (e) => this.handleMousedown(e);
     this.mouseupCallback = (e) => this.handleMouseup(e);
     canvas.addEventListener("click", this.clickCallback);
-    canvas.addEventListener("click", this.buttonClickCallback);
+		// canvas.addEventListener("click", this.buttonClickCallback);
+		canvas.addEventListener("click", throttle(e => {
+			this.handleButtonClick(e);
+		}, 1000));
+		
     canvas.addEventListener("mousedown", this.mousedownCallback);
     canvas.addEventListener("mouseup", this.mouseupCallback);
   }
@@ -181,13 +187,13 @@ class Game {
   setFound() {
     const {
       clickedCards,
-      board,
+			board,
+      setsFound,
       isBoardEmpty,
       isDeckEmpty,
       anySetsOnBoard,
       win,
-      setsFound,
-      isSet,
+			isSet,
     } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
@@ -214,7 +220,7 @@ class Game {
         isBoardEmpty(board) ||
         (isDeckEmpty(board) && !anySetsOnBoard(board, isSet))
       ) {
-        console.log("You win!");
+				console.log("You win!");
         win(board);
       }
     }, 250);
@@ -339,7 +345,7 @@ class Game {
   }
 
   win(board) {
-    board.drawWin();
+		board.drawWin();
   }
 }
 

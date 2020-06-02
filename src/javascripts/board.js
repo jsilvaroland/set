@@ -212,9 +212,11 @@ class Board {
   drawWin() {
     const { ctx } = this;
 
-    ctx.font = "100px Arial";
+		this.drawRoundedRect(165 - 73, 400 - 48 - 73, 389 + (73 * 2), 73 + (48 * 2), "#959595", "#FFFFFF");
+
+		ctx.font = "100px Arial";
     ctx.fillStyle = "#000000";
-    this.ctx.fillText(`You Win!`, 250, 400);
+    this.ctx.fillText(`You Win!`, 165, 400);
 		// change these coordinates later
 		ctx.font = "20px Arial";
     ctx.fillStyle = "#FFFFFF";
