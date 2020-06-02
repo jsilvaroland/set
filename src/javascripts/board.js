@@ -29,8 +29,8 @@ class Board {
     this.initialDisplayCards();
     this.displayDeckCount();
     this.displaySetsFound(0);
-    this.displayFindSet(); // can change these coordinates to move button
-    this.displayAdd3Cards(); // can change these coordinates to move button
+    this.displayFindSet();
+    this.displayAdd3Cards();
   }
 
   resetCanvas() {
@@ -58,7 +58,7 @@ class Board {
   }
 
   clearCardArea(x, y) {
-    this.ctx.clearRect(x - 3, y - 3, 197 + 3, 137 + 3); // clears area
+    this.ctx.clearRect(x - 3, y - 3, 197 + 3, 137 + 3);
   }
 
   removeCard(card) {
@@ -137,7 +137,6 @@ class Board {
       const { x, y } = coords;
       this.displayCard(x, y);
     });
-    console.log(this.board);
   }
 
   displayDeckCount() {
@@ -153,7 +152,6 @@ class Board {
 
   displaySetsFound(setsFound) {
     const { ctx } = this;
-
     this.ctx.clearRect(160, 0, 160, 50);
     ctx.fillStyle = "#000000";
     this.ctx.fillText(`Sets Found: ${setsFound}`, 165, 40);
@@ -189,7 +187,6 @@ class Board {
     const { x, y, width, height } = this.add3CardsButton;
 
 		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
-		console.log('clear rect');
     this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
     ctx.fillStyle = "#000000";

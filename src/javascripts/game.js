@@ -13,15 +13,12 @@ class Game {
 
   addGameEventListeners(canvas) {
     this.clickCallback = (e) => this.handleClick(e);
-    // this.buttonClickCallback = (e) => this.handleButtonClick(e);
     this.mousedownCallback = (e) => this.handleMousedown(e);
     this.mouseupCallback = (e) => this.handleMouseup(e);
     canvas.addEventListener("click", this.clickCallback);
-		// canvas.addEventListener("click", this.buttonClickCallback);
 		canvas.addEventListener("click", throttle(e => {
 			this.handleButtonClick(e);
 		}, 1000));
-		
     canvas.addEventListener("mousedown", this.mousedownCallback);
     canvas.addEventListener("mouseup", this.mouseupCallback);
   }
@@ -116,7 +113,6 @@ class Game {
   }
 
   handleClickFindSet() {
-    console.log("find set");
     if (this.anySetsOnBoard(this.board, this.isSet)) {
       // call set found with a setTimeout
       console.log(this.setOnBoard);
@@ -171,11 +167,6 @@ class Game {
           this.board.highlightSet(card);
           //display message "SET FOUND"
         });
-
-        // setTimeout(function () {
-        //   this.setFound();
-        // }, 250);
-
         this.setFound();
       } else {
         this.notASet();
@@ -188,7 +179,6 @@ class Game {
     const {
       clickedCards,
 			board,
-      setsFound,
       isBoardEmpty,
       isDeckEmpty,
       anySetsOnBoard,
@@ -197,9 +187,10 @@ class Game {
     } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
+		console.log("is a set!");
+		this.setsFound++;
+		board.displaySetsFound(this.setsFound);
     setTimeout(function () {
-      this.setsFound++;
-      console.log("is a set!");
       let cardPosX, cardPosY;
       clickedCards.forEach((card) => {
         cardPosX = card.pos.x;
@@ -213,14 +204,13 @@ class Game {
       });
       console.log(board.board);
       board.displayDeckCount();
-      board.displaySetsFound(setsFound);
+      // board.displaySetsFound(setsFound);
       // check if deck is empty and if any sets on board. if not, game over you win!
 
       if (
         isBoardEmpty(board) ||
         (isDeckEmpty(board) && !anySetsOnBoard(board, isSet))
       ) {
-				console.log("You win!");
         win(board);
       }
     }, 250);
@@ -237,7 +227,6 @@ class Game {
   notASet() {
     const { board, clickedCards } = this;
 
-    console.log("not a set");
     clickedCards.forEach((card) => {
       this.board.errorHighlight(card);
       //display message "NOT A SET"
@@ -262,14 +251,12 @@ class Game {
       card1.card.color === card2.card.color &&
       card2.card.color === card3.card.color
     ) {
-      console.log("all cards same color");
       colorReq = true;
     } else if (
       card1.card.color !== card2.card.color &&
       card1.card.color !== card3.card.color &&
       card2.card.color !== card3.card.color
     ) {
-      console.log("all cards diff color");
       colorReq = true;
     }
 
@@ -319,7 +306,6 @@ class Game {
   }
 
   anySetsOnBoard(board, isSet) {
-    // debugger
     // iterate through board, all combinations of 3 cards
     for (let i = 0; i < board.board.length; i++) {
       const card1 = board.board[i];
@@ -327,8 +313,7 @@ class Game {
         const card2 = board.board[j];
         for (let k = j + 1; k < board.board.length; k++) {
           const card3 = board.board[k];
-          if (!card1 || !card2 || !card3) {
-            console.log("spot is empty");
+          if (!card1 || !card2 || !card3) { // if the spot on the board is empty
             continue;
           } else if (isSet(card1, card2, card3)) {
             this.setOnBoard = [card1, card2, card3];

@@ -1,8 +1,5 @@
 import Set from './set';
 
-//testing 
-// end testing
-
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById("set-game");
     const set = new Set(canvas);
@@ -17,8 +14,3 @@ document.addEventListener('DOMContentLoaded', () => {
       set.newGameExpert();
     });
 });
-
-// document.addEventListener('click', () => {
-//     const newGame = document.getElementById("new-game");
-//     console.log('hello');
-// });
