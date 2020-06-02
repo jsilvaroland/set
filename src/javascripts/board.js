@@ -37,22 +37,22 @@ class Board {
     this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
   }
 
-  drawRoundedRect(x, y, width, height, strokeStyle, fillStyle) {
+  drawRoundedRect(x, y, w, h, stroke, fill, borderRad = 10, lineWidth = 3) {
     const { ctx } = this;
 
     ctx.beginPath();
-    ctx.moveTo(x + 10, y);
-    ctx.lineTo(x + width - 10, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + 10);
-    ctx.lineTo(x + width, y + height - 10);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - 10, y + height);
-    ctx.lineTo(x + 10, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - 10);
-    ctx.lineTo(x, y + 10);
-    ctx.quadraticCurveTo(x, y, x + 10, y);
-    ctx.strokeStyle = strokeStyle;
-    ctx.fillStyle = fillStyle;
-    ctx.lineWidth = 3;
+    ctx.moveTo(x + borderRad, y);
+    ctx.lineTo(x + w - borderRad, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + borderRad);
+    ctx.lineTo(x + w, y + h - borderRad);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - borderRad, y + h);
+    ctx.lineTo(x + borderRad, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - borderRad);
+    ctx.lineTo(x, y + borderRad);
+    ctx.quadraticCurveTo(x, y, x + borderRad, y);
+    ctx.strokeStyle = stroke;
+    ctx.fillStyle = fill;
+    ctx.lineWidth = lineWidth;
     this.ctx.stroke();
     this.ctx.fill();
   }
@@ -212,7 +212,7 @@ class Board {
   drawWin() {
     const { ctx } = this;
 
-		this.drawRoundedRect(165 - 73, 400 - 48 - 73, 389 + (73 * 2), 73 + (48 * 2), "#959595", "#FFFFFF");
+		this.drawRoundedRect(165 - 73, 400 - 48 - 73, 389 + (73 * 2), 73 + (48 * 2), "#959595", "#FFFFFF", 30, 5);
 
 		ctx.font = "100px Arial";
     ctx.fillStyle = "#000000";
