@@ -22,25 +22,25 @@ class Board {
     this.dimensions = { width: canvas.width, height: canvas.height };
 
     this.board = [];
-		this.deck = new Deck(difficulty);
-		this.findSetButton = new Button(400, 15, 106, 35);
-		this.add3CardsButton = new Button(528, 15, 141, 35);
+    this.deck = new Deck(difficulty);
+    this.findSetButton = new Button(400, 15, 106, 35);
+    this.add3CardsButton = new Button(528, 15, 141, 35);
     this.resetCanvas();
     this.initialDisplayCards();
     this.displayDeckCount();
-		this.displaySetsFound(0);
+    this.displaySetsFound(0);
     this.displayFindSet(); // can change these coordinates to move button
     this.displayAdd3Cards(); // can change these coordinates to move button
   }
 
   resetCanvas() {
     this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
-	}
-	
-	drawRoundedRect(x, y, width, height, strokeStyle, fillStyle) {
-		const { ctx } = this;
+  }
 
-		ctx.beginPath();
+  drawRoundedRect(x, y, width, height, strokeStyle, fillStyle) {
+    const { ctx } = this;
+
+    ctx.beginPath();
     ctx.moveTo(x + 10, y);
     ctx.lineTo(x + width - 10, y);
     ctx.quadraticCurveTo(x + width, y, x + width, y + 10);
@@ -55,7 +55,7 @@ class Board {
     ctx.lineWidth = 3;
     this.ctx.stroke();
     this.ctx.fill();
-	}
+  }
 
   clearCardArea(x, y) {
     this.ctx.clearRect(x - 3, y - 3, 197 + 3, 137 + 3); // clears area
@@ -67,46 +67,46 @@ class Board {
   }
 
   highlight(card) {
-		const { x, y } = card.pos;
-		const { width, height } = card.card;
+    const { x, y } = card.pos;
+    const { width, height } = card.card;
 
-		this.clearCardArea(x, y);
-		this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
+    this.clearCardArea(x, y);
+    this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
     this.drawCardImage(card.card, card.pos);
-	}
-	
-	highlightSet(card) {
-		const { x, y } = card.pos;
-		const { width, height } = card.card;
-		
-		this.clearCardArea(x, y);
-		this.drawRoundedRect(x, y, width, height, "#959595", "#DDFEDF");
-		this.drawCardImage(card.card, card.pos);
-	}
+  }
+
+  highlightSet(card) {
+    const { x, y } = card.pos;
+    const { width, height } = card.card;
+
+    this.clearCardArea(x, y);
+    this.drawRoundedRect(x, y, width, height, "#959595", "#DDFEDF");
+    this.drawCardImage(card.card, card.pos);
+  }
 
   unhighlight(card) {
-		const { x, y } = card.pos;
-		const { width, height } = card.card;
+    const { x, y } = card.pos;
+    const { width, height } = card.card;
 
-		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+    this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
     this.drawCardImage(card.card, card.pos);
   }
 
   errorHighlight(card) {
-		const { x, y } = card.pos;
-		const { width, height } = card.card;
-		
+    const { x, y } = card.pos;
+    const { width, height } = card.card;
+
     this.clearCardArea(x, y);
-		this.drawRoundedRect(x, y, width, height, "#959595", "#FEDDDF");
+    this.drawRoundedRect(x, y, width, height, "#959595", "#FEDDDF");
     this.drawCardImage(card.card, card.pos);
   }
 
   displayCard(x, y) {
-		const card = this.deck.deal();
-		const { width, height } = card;
-		const pos = { x, y };
-		
-		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+    const card = this.deck.deal();
+    const { width, height } = card;
+    const pos = { x, y };
+
+    this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
     if (this.board.includes(undefined)) {
       for (let i = 0; i < this.board.length; i++) {
@@ -161,10 +161,23 @@ class Board {
   }
 
   displayFindSet() {
-		const { ctx } = this;
+    const { ctx } = this;
 		const { x, y, width, height } = this.findSetButton;
 
-		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+		this.ctx.clearRect(x - 2, y - 2, width + 5, height + 5);
+    this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`Find Set`, x + 15, y + 25);
+    ctx.fillStyle = "#FFFFFF";
+  }
+
+  highlightFindSet() {
+    const { ctx } = this;
+    const { x, y, width, height } = this.findSetButton;
+
+		this.ctx.clearRect(x - 2, y - 2, width + 5, height + 5);
+    this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
 
     ctx.fillStyle = "#000000";
     this.ctx.fillText(`Find Set`, x + 15, y + 25);
@@ -173,9 +186,23 @@ class Board {
 
   displayAdd3Cards() {
     const { ctx } = this;
-		const { x, y, width, height } = this.add3CardsButton;
-		
-		this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+    const { x, y, width, height } = this.add3CardsButton;
+
+		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
+		console.log('clear rect');
+    this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+
+    ctx.fillStyle = "#000000";
+    this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
+    ctx.fillStyle = "#FFFFFF";
+  }
+
+  highlightAdd3Cards() {
+    const { ctx } = this;
+    const { x, y, width, height } = this.add3CardsButton;
+
+		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
+    this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
 
     ctx.fillStyle = "#000000";
     this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
@@ -188,7 +215,8 @@ class Board {
     ctx.font = "100px Arial";
     ctx.fillStyle = "#000000";
     this.ctx.fillText(`You Win!`, 250, 400);
-    // change these coordinates later
+		// change these coordinates later
+		ctx.font = "20px Arial";
     ctx.fillStyle = "#FFFFFF";
   }
 }
