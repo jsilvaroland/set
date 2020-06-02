@@ -73,7 +73,16 @@ class Board {
 		this.clearCardArea(x, y);
 		this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
     this.drawCardImage(card.card, card.pos);
-  }
+	}
+	
+	highlightSet(card) {
+		const { x, y } = card.pos;
+		const { width, height } = card.card;
+		
+		this.clearCardArea(x, y);
+		this.drawRoundedRect(x, y, width, height, "#959595", "#DDFEDF");
+		this.drawCardImage(card.card, card.pos);
+	}
 
   unhighlight(card) {
 		const { x, y } = card.pos;
