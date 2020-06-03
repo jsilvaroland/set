@@ -120,7 +120,7 @@ class Board {
     this.ctx = ctx;
     this.dimensions = { width: canvas.width, height: canvas.height };
 
-    this.board = [];
+    this.field = [];
     this.deck = new _deck__WEBPACK_IMPORTED_MODULE_0__["default"](difficulty);
     this.findSetButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](400, 15, 106, 35);
     this.add3CardsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](528, 15, 141, 35);
@@ -161,8 +161,8 @@ class Board {
   }
 
   removeCard(card) {
-    const i = this.board.indexOf(card);
-    delete this.board[i];
+    const i = this.field.indexOf(card);
+    delete this.field[i];
   }
 
   highlight(card) {
@@ -207,15 +207,15 @@ class Board {
 
     this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
-    if (this.board.includes(undefined)) {
-      for (let i = 0; i < this.board.length; i++) {
-        if (typeof this.board[i] == "undefined") {
-          this.board[i] = { pos, card };
+    if (this.field.includes(undefined)) {
+      for (let i = 0; i < this.field.length; i++) {
+        if (typeof this.field[i] == "undefined") {
+          this.field[i] = { pos, card };
         }
       }
       this.drawCardImage(card, pos);
     } else {
-      this.board.push({ pos, card });
+      this.field.push({ pos, card });
       card.image.onload = () => {
         this.drawCardImage(card, pos);
       };
@@ -240,12 +240,11 @@ class Board {
 
   displayDeckCount() {
     const { ctx } = this;
-    const { deck } = this.deck;
 
     this.ctx.clearRect(0, 0, 160, 50);
     ctx.font = "20px Arial";
     ctx.fillStyle = "#000000";
-    this.ctx.fillText(`Deck: ${deck.length}`, 50, 40);
+    this.ctx.fillText(`Deck: ${this.deck.cards.length}`, 50, 40);
     ctx.fillStyle = "#FFFFFF";
   }
 
@@ -400,7 +399,8 @@ class Deck {
 
 	repopulateDeckNovice() {
 	// empties deck if not already empty
-		this.deck = [];
+		// this.deck = [];
+		this.cards = [];
 		let image, card;
 		let shading = { shading: 'solid' };
 
@@ -411,7 +411,7 @@ class Deck {
 					image.src = `./src/assets/${color}-${number}-${shape}-solid.png`;
 
 					card = new _card__WEBPACK_IMPORTED_MODULE_0__["default"](color, number, shape, shading, image);
-					this.deck.push(card);
+					this.cards.push(card);
 				});
 			});
 		});
@@ -419,7 +419,7 @@ class Deck {
 
 	repopulateDeckExpert() {
 		// empties deck if not already empty
-		this.deck = [];
+		this.cards = [];
 		let image, card;
 
 		ATTRIBUTES.colors.forEach(color => {
@@ -430,7 +430,7 @@ class Deck {
 						image.src = `./src/assets/${color}-${number}-${shape}-${shading}.png`;
 
 						card = new _card__WEBPACK_IMPORTED_MODULE_0__["default"](color, number, shape, shading, image);
-						this.deck.push(card);
+						this.cards.push(card);
 					});
 				});
 			});
@@ -438,13 +438,13 @@ class Deck {
 	}
 
 	shuffle() {
-		const { deck } = this;
-		let count = deck.length;
+		const { cards } = this;
+		let count = cards.length;
 		let i;
 
 		while (count) {
 			i = Math.floor(Math.random() * count--);
-			[deck[count], deck[i]] = [deck[i], deck[count]];
+			[cards[count], cards[i]] = [cards[i], cards[count]];
 		}
 	}
 
@@ -459,7 +459,7 @@ class Deck {
 	}
 
 	deal() {
-		return this.deck.pop();
+		return this.cards.pop();
 	}
 }
 
@@ -525,11 +525,11 @@ class Game {
     this.mousedownCallback = (e) => this.handleMousedown(e);
     this.mouseupCallback = (e) => this.handleMouseup(e);
     canvas.addEventListener("click", this.clickCallback);
-		canvas.addEventListener("click", Object(_util__WEBPACK_IMPORTED_MODULE_1__["throttle"])(e => {
-			this.handleButtonClick(e);
+		canvas.addEventListener("mouseup", Object(_util__WEBPACK_IMPORTED_MODULE_1__["throttle"])(e => {
+			this.handleMouseup(e);
 		}, 1000));
     canvas.addEventListener("mousedown", this.mousedownCallback);
-    canvas.addEventListener("mouseup", this.mouseupCallback);
+    // canvas.addEventListener("mouseup", this.mouseupCallback);
   }
 
   removeGameEventListeners(canvas) {
@@ -568,13 +568,15 @@ class Game {
       mouseupPos.y >= 15 &&
       mouseupPos.y < 15 + 37
     ) {
-			this.board.displayFindSet();
+      this.handleClickFindSet();
+      this.board.displayFindSet();
     } else if (
       mouseupPos.x >= 528 &&
       mouseupPos.x < 528 + 143 &&
       mouseupPos.y >= 15 &&
       mouseupPos.y < 15 + 37
     ) {
+      this.handleClickAdd3Cards();
       this.board.displayAdd3Cards();
     }
   }
@@ -600,35 +602,37 @@ class Game {
     console.log(this.clickedCards);
   }
 
-  handleButtonClick(e) {
-    // finds the button that was clicked
-    const clickPos = { x: e.layerX, y: e.layerY };
+  // handleButtonClick(e) {
+  //   // finds the button that was clicked
+  //   const clickPos = { x: e.layerX, y: e.layerY };
 
-    if (
-      clickPos.x >= 400 &&
-      clickPos.x < 400 + 108 &&
-      clickPos.y >= 15 &&
-      clickPos.y < 15 + 37
-    ) {
-      this.handleClickFindSet();
-    } else if (
-      clickPos.x >= 528 &&
-      clickPos.x < 528 + 143 &&
-      clickPos.y >= 15 &&
-      clickPos.y < 15 + 37
-    ) {
-      this.handleClickAdd3Cards();
-    }
-  }
+  //   if (
+  //     clickPos.x >= 400 &&
+  //     clickPos.x < 400 + 108 &&
+  //     clickPos.y >= 15 &&
+  //     clickPos.y < 15 + 37
+  //   ) {
+  //     this.handleClickFindSet();
+  //   } else if (
+  //     clickPos.x >= 528 &&
+  //     clickPos.x < 528 + 143 &&
+  //     clickPos.y >= 15 &&
+  //     clickPos.y < 15 + 37
+  //   ) {
+  //     this.handleClickAdd3Cards();
+  //   }
+  // }
 
   handleClickFindSet() {
-    if (this.anySetsOnBoard(this.board, this.isSet)) {
+    if (this.anySetsOnBoard()) {
       // call set found with a setTimeout
       console.log(this.setOnBoard);
 
       this.clickedCards.forEach((card) => {
         this.board.unhighlight(card);
       });
+
+      console.log(this.setOnBoard);
 
       this.setOnBoard.forEach((card) => {
         this.board.highlightSet(card);
@@ -653,9 +657,9 @@ class Game {
   }
 
   findClickedCard(clickPos) {
-    const { board } = this.board;
+    const { field } = this.board;
 
-    return board.find((card) => {
+    return field.find((card) => {
       if (card) {
         return (
           clickPos.x >= card.pos.x &&
@@ -674,6 +678,7 @@ class Game {
       if (this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
         clickedCards.forEach((card) => {
           this.board.highlightSet(card);
+          console.log('calling highligh set(should only happen thrice');
           //display message "SET FOUND"
         });
         this.setFound();
@@ -699,11 +704,11 @@ class Game {
         board.clearCardArea(cardPosX, cardPosY);
         board.removeCard(card);
         // if deck has cards left, displayCard
-        if (board.deck.deck.length) {
+        if (board.deck.cards.length) {
           board.displayCard(cardPosX, cardPosY);
         }
       });
-      console.log(board.board);
+      console.log(board.field);
       board.displayDeckCount();
       if (
         this.isBoardEmpty.call(this) ||
@@ -715,11 +720,11 @@ class Game {
   }
 
   isDeckEmpty() {
-    return !this.board.deck.deck.length;
+    return !this.board.deck.cards.length;
   }
 
   isBoardEmpty() {
-    return !this.board.board.some((card) => card);
+    return !this.board.field.some((card) => card);
   }
 
   notASet() {
@@ -804,14 +809,14 @@ class Game {
   }
 
   anySetsOnBoard() {
-		const { board } = this;
+		const { field } = this.board;
     // iterate through board, all combinations of 3 cards
-    for (let i = 0; i < board.board.length; i++) {
-      const card1 = board.board[i];
-      for (let j = i + 1; j < board.board.length; j++) {
-        const card2 = board.board[j];
-        for (let k = j + 1; k < board.board.length; k++) {
-          const card3 = board.board[k];
+    for (let i = 0; i < field.length; i++) {
+      const card1 = field[i];
+      for (let j = i + 1; j < field.length; j++) {
+        const card2 = field[j];
+        for (let k = j + 1; k < field.length; k++) {
+          const card3 = field[k];
           if (!card1 || !card2 || !card3) { // if the spot on the board is empty
             continue;
           } else if (this.isSet(card1, card2, card3)) {

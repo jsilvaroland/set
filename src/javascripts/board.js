@@ -141,12 +141,11 @@ class Board {
 
   displayDeckCount() {
     const { ctx } = this;
-    const { deck } = this.deck;
 
     this.ctx.clearRect(0, 0, 160, 50);
     ctx.font = "20px Arial";
     ctx.fillStyle = "#000000";
-    this.ctx.fillText(`Deck: ${deck.length}`, 50, 40);
+    this.ctx.fillText(`Deck: ${this.deck.cards.length}`, 50, 40);
     ctx.fillStyle = "#FFFFFF";
   }
 

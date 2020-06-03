@@ -16,11 +16,11 @@ class Game {
     this.mousedownCallback = (e) => this.handleMousedown(e);
     this.mouseupCallback = (e) => this.handleMouseup(e);
     canvas.addEventListener("click", this.clickCallback);
-		canvas.addEventListener("click", throttle(e => {
-			this.handleButtonClick(e);
+		canvas.addEventListener("mouseup", throttle(e => {
+			this.handleMouseup(e);
 		}, 1000));
     canvas.addEventListener("mousedown", this.mousedownCallback);
-    canvas.addEventListener("mouseup", this.mouseupCallback);
+    // canvas.addEventListener("mouseup", this.mouseupCallback);
   }
 
   removeGameEventListeners(canvas) {
@@ -59,13 +59,15 @@ class Game {
       mouseupPos.y >= 15 &&
       mouseupPos.y < 15 + 37
     ) {
-			this.board.displayFindSet();
+      this.handleClickFindSet();
+      this.board.displayFindSet();
     } else if (
       mouseupPos.x >= 528 &&
       mouseupPos.x < 528 + 143 &&
       mouseupPos.y >= 15 &&
       mouseupPos.y < 15 + 37
     ) {
+      this.handleClickAdd3Cards();
       this.board.displayAdd3Cards();
     }
   }
@@ -91,26 +93,26 @@ class Game {
     console.log(this.clickedCards);
   }
 
-  handleButtonClick(e) {
-    // finds the button that was clicked
-    const clickPos = { x: e.layerX, y: e.layerY };
+  // handleButtonClick(e) {
+  //   // finds the button that was clicked
+  //   const clickPos = { x: e.layerX, y: e.layerY };
 
-    if (
-      clickPos.x >= 400 &&
-      clickPos.x < 400 + 108 &&
-      clickPos.y >= 15 &&
-      clickPos.y < 15 + 37
-    ) {
-      this.handleClickFindSet();
-    } else if (
-      clickPos.x >= 528 &&
-      clickPos.x < 528 + 143 &&
-      clickPos.y >= 15 &&
-      clickPos.y < 15 + 37
-    ) {
-      this.handleClickAdd3Cards();
-    }
-  }
+  //   if (
+  //     clickPos.x >= 400 &&
+  //     clickPos.x < 400 + 108 &&
+  //     clickPos.y >= 15 &&
+  //     clickPos.y < 15 + 37
+  //   ) {
+  //     this.handleClickFindSet();
+  //   } else if (
+  //     clickPos.x >= 528 &&
+  //     clickPos.x < 528 + 143 &&
+  //     clickPos.y >= 15 &&
+  //     clickPos.y < 15 + 37
+  //   ) {
+  //     this.handleClickAdd3Cards();
+  //   }
+  // }
 
   handleClickFindSet() {
     if (this.anySetsOnBoard()) {
@@ -120,6 +122,8 @@ class Game {
       this.clickedCards.forEach((card) => {
         this.board.unhighlight(card);
       });
+
+      console.log(this.setOnBoard);
 
       this.setOnBoard.forEach((card) => {
         this.board.highlightSet(card);
@@ -165,6 +169,7 @@ class Game {
       if (this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
         clickedCards.forEach((card) => {
           this.board.highlightSet(card);
+          console.log('calling highligh set(should only happen thrice');
           //display message "SET FOUND"
         });
         this.setFound();
@@ -194,7 +199,7 @@ class Game {
           board.displayCard(cardPosX, cardPosY);
         }
       });
-      console.log(board.board);
+      console.log(board.field);
       board.displayDeckCount();
       if (
         this.isBoardEmpty.call(this) ||
@@ -210,7 +215,7 @@ class Game {
   }
 
   isBoardEmpty() {
-    return !this.board.board.some((card) => card);
+    return !this.board.field.some((card) => card);
   }
 
   notASet() {
