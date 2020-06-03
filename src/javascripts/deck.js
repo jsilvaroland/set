@@ -18,7 +18,8 @@ class Deck {
 
 	repopulateDeckNovice() {
 	// empties deck if not already empty
-		this.deck = [];
+		// this.deck = [];
+		this.cards = [];
 		let image, card;
 		let shading = { shading: 'solid' };
 
@@ -29,7 +30,7 @@ class Deck {
 					image.src = `./src/assets/${color}-${number}-${shape}-solid.png`;
 
 					card = new Card(color, number, shape, shading, image);
-					this.deck.push(card);
+					this.cards.push(card);
 				});
 			});
 		});
@@ -37,7 +38,7 @@ class Deck {
 
 	repopulateDeckExpert() {
 		// empties deck if not already empty
-		this.deck = [];
+		this.cards = [];
 		let image, card;
 
 		ATTRIBUTES.colors.forEach(color => {
@@ -48,7 +49,7 @@ class Deck {
 						image.src = `./src/assets/${color}-${number}-${shape}-${shading}.png`;
 
 						card = new Card(color, number, shape, shading, image);
-						this.deck.push(card);
+						this.cards.push(card);
 					});
 				});
 			});
@@ -56,13 +57,13 @@ class Deck {
 	}
 
 	shuffle() {
-		const { deck } = this;
-		let count = deck.length;
+		const { cards } = this;
+		let count = cards.length;
 		let i;
 
 		while (count) {
 			i = Math.floor(Math.random() * count--);
-			[deck[count], deck[i]] = [deck[i], deck[count]];
+			[cards[count], cards[i]] = [cards[i], cards[count]];
 		}
 	}
 
@@ -77,7 +78,7 @@ class Deck {
 	}
 
 	deal() {
-		return this.deck.pop();
+		return this.cards.pop();
 	}
 }
 

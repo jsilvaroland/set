@@ -21,7 +21,7 @@ class Board {
     this.ctx = ctx;
     this.dimensions = { width: canvas.width, height: canvas.height };
 
-    this.board = [];
+    this.field = [];
     this.deck = new Deck(difficulty);
     this.findSetButton = new Button(400, 15, 106, 35);
     this.add3CardsButton = new Button(528, 15, 141, 35);
@@ -62,8 +62,8 @@ class Board {
   }
 
   removeCard(card) {
-    const i = this.board.indexOf(card);
-    delete this.board[i];
+    const i = this.field.indexOf(card);
+    delete this.field[i];
   }
 
   highlight(card) {
@@ -108,15 +108,15 @@ class Board {
 
     this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
-    if (this.board.includes(undefined)) {
-      for (let i = 0; i < this.board.length; i++) {
-        if (typeof this.board[i] == "undefined") {
-          this.board[i] = { pos, card };
+    if (this.field.includes(undefined)) {
+      for (let i = 0; i < this.field.length; i++) {
+        if (typeof this.field[i] == "undefined") {
+          this.field[i] = { pos, card };
         }
       }
       this.drawCardImage(card, pos);
     } else {
-      this.board.push({ pos, card });
+      this.field.push({ pos, card });
       card.image.onload = () => {
         this.drawCardImage(card, pos);
       };

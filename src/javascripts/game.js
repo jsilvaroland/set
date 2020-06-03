@@ -113,7 +113,7 @@ class Game {
   }
 
   handleClickFindSet() {
-    if (this.anySetsOnBoard(this.board, this.isSet)) {
+    if (this.anySetsOnBoard()) {
       // call set found with a setTimeout
       console.log(this.setOnBoard);
 
@@ -144,9 +144,9 @@ class Game {
   }
 
   findClickedCard(clickPos) {
-    const { board } = this.board;
+    const { field } = this.board;
 
-    return board.find((card) => {
+    return field.find((card) => {
       if (card) {
         return (
           clickPos.x >= card.pos.x &&
@@ -190,7 +190,7 @@ class Game {
         board.clearCardArea(cardPosX, cardPosY);
         board.removeCard(card);
         // if deck has cards left, displayCard
-        if (board.deck.deck.length) {
+        if (board.deck.cards.length) {
           board.displayCard(cardPosX, cardPosY);
         }
       });
@@ -206,7 +206,7 @@ class Game {
   }
 
   isDeckEmpty() {
-    return !this.board.deck.deck.length;
+    return !this.board.deck.cards.length;
   }
 
   isBoardEmpty() {
@@ -295,14 +295,14 @@ class Game {
   }
 
   anySetsOnBoard() {
-		const { board } = this;
+		const { field } = this.board;
     // iterate through board, all combinations of 3 cards
-    for (let i = 0; i < board.board.length; i++) {
-      const card1 = board.board[i];
-      for (let j = i + 1; j < board.board.length; j++) {
-        const card2 = board.board[j];
-        for (let k = j + 1; k < board.board.length; k++) {
-          const card3 = board.board[k];
+    for (let i = 0; i < field.length; i++) {
+      const card1 = field[i];
+      for (let j = i + 1; j < field.length; j++) {
+        const card2 = field[j];
+        for (let k = j + 1; k < field.length; k++) {
+          const card3 = field[k];
           if (!card1 || !card2 || !card3) { // if the spot on the board is empty
             continue;
           } else if (this.isSet(card1, card2, card3)) {
