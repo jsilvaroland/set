@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="./src/stylesheets/reset.css" />
     <link rel="stylesheet" type="text/css" href="./src/stylesheets/layout.css" />
+    <link rel="stylesheet" type="text/css" href="./src/stylesheets/modal.css" />
+    <link rel="stylesheet" type="text/css" href="./src/stylesheets/instructions.css" />
     <script type="application/javascript" src="./src/javascripts/bundle.js"></script>
 </head>
 <body>
@@ -25,10 +27,93 @@
                 <button id="new-game-expert">New Game (Expert)</button>
             </span>
             <span class="button-wrapper">
-                <button id="instructions">Instructions</button>
+                <button id="instructions-btn">Instructions</button>
             </span>
         </div>
         <canvas id="set-game" height="1200" width="719"></canvas>
+    </div>
+    <div id="instructions-modal" class="modal">
+        <div class="modal-content">
+            <!-- <span id="prev">&lsaquo;</span> -->
+            <span class="close">&times;</span>
+            <span id="next">&rsaquo;</span>
+            <h1 class="welcome">Welcome to Set!</h1>
+            <div class="modal-body">
+                <p>The object of the game is to identify a Set of 3 cards from 12 placed face up on the field. Each card has four
+                attributes, and each attribute has three possible variants as follows:</p>
+                <div class="attributes">
+                    <span>
+                        <h2>Color</h2>
+                        <div>
+                            <img src="./src/assets/red-one-oval-solid.png">
+                            <span>Red</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/green-one-oval-solid.png">
+                            <span>Green</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/purple-one-oval-solid.png">
+                            <span>Purple</span>
+                        </div>
+                    </span>
+                    <span>
+                        <h2>Shape</h2>
+                        <div>
+                            <img src="./src/assets/green-one-oval-solid.png">
+                            <span>Oval</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/green-one-diamond-solid.png">
+                            <span>Diamond</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/green-one-squiggle-solid.png">
+                            <span>Squiggle</span>
+                        </div>
+                    </span>
+                    <span>
+                        <h2>Number</h2>
+                        <div>
+                            <img src="./src/assets/red-one-diamond-solid.png">
+                            <span>One</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/red-two-diamond-solid.png">
+                            <span>Two</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/red-three-diamond-solid.png">
+                            <span>Three</span>
+                        </div>
+                    </span>
+                    <span>
+                        <h2>Shading</h2>
+                        <div>
+                            <img src="./src/assets/purple-two-diamond-solid.png">
+                            <span>Solid</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/purple-two-diamond-open.png">
+                            <span>Open</span>
+                        </div>
+                        <div>
+                            <img src="./src/assets/purple-two-diamond-striped.png">
+                            <span>Striped</span>
+                        </div>
+                    </span>
+                </div>
+                <div class="set-matching">
+                    <p>A Set consists of 3 cards in which each of the cards' attributes, looked at one-by-one:</p>
+                    <div>are the same between each card</div>
+                    <div>OR</div>
+                    <div>are different between each card</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modalPage2">
+
     </div>
 </body>
 </html>

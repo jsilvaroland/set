@@ -1,0 +1,46 @@
+.welcome {
+    text-align: center;
+    font-size: 48px;
+}
+
+.modal-body {
+    padding: 10px 35px;
+    line-height: 25px;
+}
+
+.set-matching > div {
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+p {
+    padding-bottom: 10px;
+    text-align: justify;
+}
+
+.attributes {
+    display: flex;
+    justify-content: space-between;
+    overflow: auto;
+    padding-bottom: 10px;
+}
+
+.attributes > span > * {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.attributes > span > div > * {
+    margin: 0 5px;
+    font-size: 12px;
+}
+
+.attributes h2 {
+    font-weight: bold;
+}
+
+.attributes img {
+    max-height: 34px;
+    max-width: 56px;
+}
