@@ -1,32 +1,36 @@
 import Game from './game';
+import { throttle } from "./util";
 
 class Set {
   constructor(canvas) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.dimensions = { width: canvas.width, height: canvas.height };
+    this.addGameEventListeners(this.canvas);
+  }
+
+  addGameEventListeners(canvas) {
+    this.clickCallback = (e) => this.game.handleClick(e);
+    this.event = canvas.addEventListener("click", this.clickCallback);
+
+    this.mousedownCallback = (e) => this.game.handleMousedown(e);
+    canvas.addEventListener("mousedown", this.mousedownCallback);
+
+    this.mouseupCallback = (e) => this.game.handleMouseup(e);
+  	canvas.addEventListener("mouseup", throttle(e => {
+  		this.game.handleMouseup(e);
+    }, 1000));
+
+    this.unthrottledMouseupCallback = () => this.game.unthrottledHandleMouseup();
+    canvas.addEventListener("mouseup", this.unthrottledMouseupCallback);
   }
 
   newGameExpert() {
-    if (this.game) {
-      this.game.removeGameEventListeners.call(this, this.canvas);
-      console.log("removing listeners");
-    }
-    this.game = new Game(this.ctx, this.canvas, 'expert');
-    this.game.addGameEventListeners(this.canvas);
-
-    // remove menu onClicks
+    this.game = new Game(this.ctx, this.canvas, "expert");
   }
 
   newGameNovice() {
-    if (this.game) {
-      console.log('removing listeners');
-      this.game.removeGameEventListeners(this.canvas);
-    }
-    this.game = new Game(this.ctx, this.canvas, 'novice');
-    this.game.addGameEventListeners(this.canvas);
-
-    // remove menu onClicks
+    this.game = new Game(this.ctx, this.canvas, "novice");
   }
 
   // menu stuff will go here later on

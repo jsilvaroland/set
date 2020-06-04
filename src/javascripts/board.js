@@ -121,10 +121,6 @@ class Board {
         this.drawCardImage(card, pos);
       };
     }
-
-    // card.image.onload = () => {
-    // 	this.drawCardImage(card, pos);
-    // };
   }
 
   drawCardImage(card, pos) {
@@ -213,7 +209,6 @@ class Board {
 		ctx.font = "100px Arial";
     ctx.fillStyle = "#000000";
     this.ctx.fillText(`You Win!`, 165, 400);
-		// change these coordinates later
 		ctx.font = "20px Arial";
     ctx.fillStyle = "#FFFFFF";
   }

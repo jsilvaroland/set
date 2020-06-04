@@ -220,10 +220,6 @@ class Board {
         this.drawCardImage(card, pos);
       };
     }
-
-    // card.image.onload = () => {
-    // 	this.drawCardImage(card, pos);
-    // };
   }
 
   drawCardImage(card, pos) {
@@ -312,7 +308,6 @@ class Board {
 		ctx.font = "100px Arial";
     ctx.fillStyle = "#000000";
     this.ctx.fillText(`You Win!`, 165, 400);
-		// change these coordinates later
 		ctx.font = "20px Arial";
     ctx.fillStyle = "#FFFFFF";
   }
@@ -480,18 +475,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById("set-game");
-    const set = new _set__WEBPACK_IMPORTED_MODULE_0__["default"](canvas);
-    
-    const newGameNovice = document.getElementById("new-game-novice");
-    newGameNovice.addEventListener("click", () => {
-      set.newGameNovice();
-    });
+  const canvas = document.getElementById("set-game");
+  const set = new _set__WEBPACK_IMPORTED_MODULE_0__["default"](canvas);
+  // loads page with novice difficulty game
+  set.newGameNovice();
+  
+  const newGameNovice = document.getElementById("new-game-novice");
+  newGameNovice.addEventListener("click", () => {
+    set.newGameNovice();
+  });
 
-    const newGameExpert = document.getElementById("new-game-expert");
-    newGameExpert.addEventListener("click", () => {
-      set.newGameExpert();
-    });
+  const newGameExpert = document.getElementById("new-game-expert");
+  newGameExpert.addEventListener("click", () => {
+    set.newGameExpert();
+  });
 });
 
 /***/ }),
@@ -506,42 +503,16 @@ document.addEventListener('DOMContentLoaded', () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./board */ "./src/javascripts/board.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./src/javascripts/util.js");
-
 
 
 class Game {
   constructor(ctx, canvas, difficulty) {
 		this.board = new _board__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas, difficulty);
     this.canvas = canvas;
-    this.removeGameEventListeners(canvas);
     this.clickedCards = [];
     this.setOnBoard = [];
     this.setsFound = 0;
     this.difficulty = difficulty;
-  }
-
-  addGameEventListeners(canvas) {
-    this.clickCallback = (e) => this.handleClick(e);
-    this.event = canvas.addEventListener("click", this.clickCallback);
-    
-    this.mousedownCallback = (e) => this.handleMousedown(e);
-    canvas.addEventListener("mousedown", this.mousedownCallback);
-    
-    this.mouseupCallback = (e) => this.handleMouseup(e);
-		canvas.addEventListener("mouseup", Object(_util__WEBPACK_IMPORTED_MODULE_1__["throttle"])(e => {
-			this.handleMouseup(e);
-    }, 1000));
-    
-    this.unthrottledMouseupCallback = () => this.unthrottledHandleMouseup();
-    canvas.addEventListener("mouseup", this.unthrottledMouseupCallback);
-  }
-
-  removeGameEventListeners(canvas) {
-    canvas.removeEventListener("click", this.clickCallback);
-    canvas.removeEventListener("mousedown", this.mousedownCallback);
-    canvas.removeEventListener("mouseup", this.mouseupCallback);
-    canvas.removeEventListener("mouseup", this.unthrottledMouseupCallback);
   }
 
   handleMousedown(e) {
@@ -564,7 +535,7 @@ class Game {
     }
   }
 
-  unthrottledHandleMouseup(e) {
+  unthrottledHandleMouseup() {
     this.board.displayAdd3Cards();
     this.board.displayFindSet();
   }
@@ -587,8 +558,6 @@ class Game {
       ) {
         this.handleClickAdd3Cards();
       }
-      // this.board.displayAdd3Cards();
-      // this.board.displayFindSet();
   }
 
   handleClick(e) {
@@ -614,7 +583,6 @@ class Game {
 
   handleClickFindSet() {
     if (this.anySetsOnBoard()) {
-      // call set found with a setTimeout
       this.clickedCards.forEach((card) => {
         this.board.unhighlight(card);
       });
@@ -678,7 +646,6 @@ class Game {
     const { clickedCards, board } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
-		console.log("is a set!");
 		this.setsFound++;
 		board.displaySetsFound(this.setsFound);
     setTimeout(function () {
@@ -688,7 +655,6 @@ class Game {
         cardPosY = card.pos.y;
         board.clearCardArea(cardPosX, cardPosY);
         board.removeCard(card);
-        // if deck has cards left, displayCard
         if (board.deck.cards.length) {
           board.displayCard(cardPosX, cardPosY);
         }
@@ -837,6 +803,8 @@ class Game {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./src/javascripts/game.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./src/javascripts/util.js");
+
 
 
 class Set {
@@ -844,28 +812,31 @@ class Set {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.dimensions = { width: canvas.width, height: canvas.height };
+    this.addGameEventListeners(this.canvas);
+  }
+
+  addGameEventListeners(canvas) {
+    this.clickCallback = (e) => this.game.handleClick(e);
+    this.event = canvas.addEventListener("click", this.clickCallback);
+
+    this.mousedownCallback = (e) => this.game.handleMousedown(e);
+    canvas.addEventListener("mousedown", this.mousedownCallback);
+
+    this.mouseupCallback = (e) => this.game.handleMouseup(e);
+  	canvas.addEventListener("mouseup", Object(_util__WEBPACK_IMPORTED_MODULE_1__["throttle"])(e => {
+  		this.game.handleMouseup(e);
+    }, 1000));
+
+    this.unthrottledMouseupCallback = () => this.game.unthrottledHandleMouseup();
+    canvas.addEventListener("mouseup", this.unthrottledMouseupCallback);
   }
 
   newGameExpert() {
-    if (this.game) {
-      this.game.removeGameEventListeners.call(this, this.canvas);
-      console.log("removing listeners");
-    }
-    this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, 'expert');
-    this.game.addGameEventListeners(this.canvas);
-
-    // remove menu onClicks
+    this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, "expert");
   }
 
   newGameNovice() {
-    if (this.game) {
-      console.log('removing listeners');
-      this.game.removeGameEventListeners(this.canvas);
-    }
-    this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, 'novice');
-    this.game.addGameEventListeners(this.canvas);
-
-    // remove menu onClicks
+    this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, "novice");
   }
 
   // menu stuff will go here later on

@@ -1,38 +1,13 @@
 import Board from './board';
-import { throttle } from './util';
 
 class Game {
   constructor(ctx, canvas, difficulty) {
 		this.board = new Board(ctx, canvas, difficulty);
     this.canvas = canvas;
-    this.removeGameEventListeners(canvas);
     this.clickedCards = [];
     this.setOnBoard = [];
     this.setsFound = 0;
     this.difficulty = difficulty;
-  }
-
-  addGameEventListeners(canvas) {
-    this.clickCallback = (e) => this.handleClick(e);
-    this.event = canvas.addEventListener("click", this.clickCallback);
-    
-    this.mousedownCallback = (e) => this.handleMousedown(e);
-    canvas.addEventListener("mousedown", this.mousedownCallback);
-    
-    this.mouseupCallback = (e) => this.handleMouseup(e);
-		canvas.addEventListener("mouseup", throttle(e => {
-			this.handleMouseup(e);
-    }, 1000));
-    
-    this.unthrottledMouseupCallback = () => this.unthrottledHandleMouseup();
-    canvas.addEventListener("mouseup", this.unthrottledMouseupCallback);
-  }
-
-  removeGameEventListeners(canvas) {
-    canvas.removeEventListener("click", this.clickCallback);
-    canvas.removeEventListener("mousedown", this.mousedownCallback);
-    canvas.removeEventListener("mouseup", this.mouseupCallback);
-    canvas.removeEventListener("mouseup", this.unthrottledMouseupCallback);
   }
 
   handleMousedown(e) {
@@ -55,7 +30,7 @@ class Game {
     }
   }
 
-  unthrottledHandleMouseup(e) {
+  unthrottledHandleMouseup() {
     this.board.displayAdd3Cards();
     this.board.displayFindSet();
   }
@@ -78,8 +53,6 @@ class Game {
       ) {
         this.handleClickAdd3Cards();
       }
-      // this.board.displayAdd3Cards();
-      // this.board.displayFindSet();
   }
 
   handleClick(e) {
@@ -105,7 +78,6 @@ class Game {
 
   handleClickFindSet() {
     if (this.anySetsOnBoard()) {
-      // call set found with a setTimeout
       this.clickedCards.forEach((card) => {
         this.board.unhighlight(card);
       });
@@ -169,7 +141,6 @@ class Game {
     const { clickedCards, board } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
-		console.log("is a set!");
 		this.setsFound++;
 		board.displaySetsFound(this.setsFound);
     setTimeout(function () {
@@ -179,7 +150,6 @@ class Game {
         cardPosY = card.pos.y;
         board.clearCardArea(cardPosX, cardPosY);
         board.removeCard(card);
-        // if deck has cards left, displayCard
         if (board.deck.cards.length) {
           board.displayCard(cardPosX, cardPosY);
         }
