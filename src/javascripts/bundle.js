@@ -624,7 +624,7 @@ class Game {
       this.clickedCards[1] = this.setOnBoard[1];
       this.clickedCards[2] = this.setOnBoard[2];
 
-      this.setFound();
+      this.setFound(750);
     } else {
       console.log("no sets on the board");
       //console.log('3 cards added');
@@ -671,7 +671,7 @@ class Game {
     }
   }
 
-  setFound() {
+  setFound(delay = 250) {
     const { clickedCards, board } = this;
     this.clickedCards = [];
     this.setsOnBoard = [];
@@ -696,7 +696,7 @@ class Game {
       ) {
         this.win.call(this);
       }
-		}.bind(this), 250);
+		}.bind(this), delay);
   }
 
   isDeckEmpty() {
