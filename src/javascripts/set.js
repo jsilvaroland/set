@@ -9,7 +9,8 @@ class Set {
 
   newGameExpert() {
     if (this.game) {
-      this.game.removeGameEventListeners(this.canvas);
+      this.game.removeGameEventListeners.call(this, this.canvas);
+      console.log("removing listeners");
     }
     this.game = new Game(this.ctx, this.canvas, 'expert');
     this.game.addGameEventListeners(this.canvas);
@@ -19,6 +20,7 @@ class Set {
 
   newGameNovice() {
     if (this.game) {
+      console.log('removing listeners');
       this.game.removeGameEventListeners(this.canvas);
     }
     this.game = new Game(this.ctx, this.canvas, 'novice');
