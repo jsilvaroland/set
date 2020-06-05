@@ -3,23 +3,34 @@ import Set from './set';
 document.addEventListener('DOMContentLoaded', () => {
   // Modal logic
   const modal = document.getElementById("instructions-modal");
-  const modalPage2 = document.getElementById("instructions-modal-page-2");
+  const modalPage2 = document.getElementsByClassName("modal-page-2")[0];
   const instructionsBtn = document.getElementById("instructions-btn");
-  const closeModalX = document.getElementsByClassName("close")[0];
-  const modalNext = document.getElementsByClassName("next")[0];
+  const closeModalXBtns = document.getElementsByClassName("close");
+  const prevBtn = document.getElementsByClassName("prev")[0];
+  const nextBtn = document.getElementsByClassName("next")[0];
 
   instructionsBtn.onclick = () => {
     modal.style.display = "block";
   };
 
-  closeModalX.onclick = () => {
+  closeModalXBtns[0].onclick = () => {
     modal.style.display = "none";
     modalPage2.style.display = "none";
   };
 
-  modalNext.onclick = () => {
+  closeModalXBtns[1].onclick = () => {
+    modal.style.display = "none";
+    modalPage2.style.display = "none";
+  };
+
+  nextBtn.onclick = () => {
     modal.style.display = "none";
     modalPage2.style.display = "block";
+  };
+
+  prevBtn.onclick = () => {
+    modal.style.display = "block";
+    modalPage2.style.display = "none";
   };
 
   window.onclick = (e) => {

@@ -34,7 +34,6 @@
     </div>
     <div id="instructions-modal" class="modal">
         <div class="modal-content">
-            <!-- <span class="prev">&lsaquo;</span> -->
             <span class="close">&times;</span>
             <span class="next">&rsaquo;</span>
             <h1 class="welcome">Welcome to Set!</h1>
@@ -104,16 +103,143 @@
                     </span>
                 </div>
                 <div class="set-matching">
-                    <p>A Set consists of 3 cards in which each of the cards' attributes, looked at one-by-one:</p>
-                    <div>are the same between each card</div>
-                    <div>OR</div>
-                    <div>are different between each card</div>
+                    <p>A Set consists of 3 cards in which each of the cards' 
+                        attributes, looked at one-by-one, are either the same 
+                        between each card OR different between each card. When 
+                        the deck is empty and there are no remaining sets on the
+                        field, you win!</p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modalPage2">
-
+    <div class="modal-page-2">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <span class="prev">&lsaquo;</span>
+            <h1 class="examples">Examples</h1>
+            <div class="modal-body-page-2">
+                <span class="set-examples">
+                    <h2>Sets</h2>
+                    <img src="./src/assets/set-example-1.png">
+                    <span class="attr-check">
+                        <div>
+                            <div>Color: All Purple 
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Number: All Two 
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Shape: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Shading: All Solid 
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                    </span>
+                    <img src="./src/assets/set-example-2.png">
+                    <span class="attr-check">
+                        <div>
+                            <div>Color: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Number: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Shape: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Shading: All Open 
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                    </span>
+                    <img src="./src/assets/set-example-3.png">
+                    <span class="attr-check">
+                        <div>
+                            <div>Color: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Number: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Shape: All Different 
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Shading: All Open 
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                    </span>
+                </span>
+                <span class="not-set-examples">
+                    <h2>Not Sets</h2>
+                    <img src="./src/assets/not-set-example-1.png">
+                    <span class="attr-check">
+                        <div>
+                            <div>Color: All Red
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Number: All Three
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Shape: 1 Oval, 2 Squiggles 
+                                <span class="x">&times;</span>
+                            </div>
+                            <div>Shading: 2 Open, 1 Striped
+                                <span class="x">&times;</span>
+                            </div>
+                        </div>
+                    </span>
+                    <img src="./src/assets/not-set-example-2.png">
+                    <span class="attr-check">
+                        <div>
+                            <div>Color: All Different
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Number: All Different
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Shape: 2 Ovals, 1 Diamond
+                                <span class="x">&times;</span>
+                            </div>
+                            <div>Shading: All Different
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                    </span>
+                    <img src="./src/assets/not-set-example-3.png">
+                    <span class="attr-check">
+                        <div>
+                            <div>Color: All Purple
+                                <span class="check">&check;</span>
+                            </div>
+                            <div>Number: All Three
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div>Shape: 2 Ovals, 1 Squiggle
+                                <span class="x">&times;</span>
+                            </div>
+                            <div>Shading: All Different
+                                <span class="check">&check;</span>
+                            </div>
+                        </div>
+                    </span>
+                </span>
+            </div>
+        </div>
     </div>
 </body>
 </html>

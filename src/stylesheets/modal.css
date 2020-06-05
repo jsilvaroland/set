@@ -1,5 +1,5 @@
 /* The Modal (background) */
-.modal {
+.modal, .modal-page-2 {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -11,14 +11,16 @@
   background-color: rgba(0,0,0,0.5);
 }
 
+.modal-page-2 {
+  display: none;
+}
+
 .modal-content {
-  /* for now... */
   position: relative;
-  min-height: 400px;
-  min-width: 530px;
+  /* min-height: 400px; */
+  min-width: 650px;
   max-width: 720px;
   background-color: #FFFFFF;
-  /* margin: 20% auto; 15% from the top and centered */
   top: 20vh;
   margin: 0 auto;
   padding: 30px 20px;
@@ -28,23 +30,32 @@
 }
 
 .close {
-  float: right;
+  position: absolute;
+  right: 20px;
+  top: 20px;
   font-size: 28px;
 }
 
-.next {
+.next, .prev {
   position: absolute;
   top: 45%;
-  right: 20px;
   font-size: 36px;
 }
 
-.close, .next {
+.next {
+  right: 20px;
+}
+
+.prev {
+  left: 20px;
+}
+
+.close, .next, .prev {
   color: #959595;
   font-weight: bold;
 }
 
-.close:hover, .close:focus, .next:hover, .next:focus {
+.close:hover, .close:focus, .next:hover, .next:focus, .prev:hover, .prev:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;

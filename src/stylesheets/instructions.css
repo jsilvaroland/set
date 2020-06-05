@@ -3,14 +3,19 @@
     font-size: 48px;
 }
 
-.modal-body {
-    padding: 10px 35px;
+.examples {
+    text-align: center;
+    font-size: 36px;
+}
+
+.modal-body, .modal-body-page-2 {
+    padding: 10px 35px 0;
     line-height: 25px;
 }
 
-.set-matching > div {
-    text-align: center;
-    padding-bottom: 5px;
+.modal-body-page-2 {
+    display: flex;
+    justify-content: space-around;
 }
 
 p {
@@ -22,7 +27,13 @@ p {
     display: flex;
     justify-content: space-between;
     overflow: auto;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+}
+
+.attributes > span > * {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 .attributes > span > * {
@@ -43,4 +54,42 @@ p {
 .attributes img {
     max-height: 34px;
     max-width: 56px;
+}
+
+.set-examples, .not-set-examples {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-body-page-2 img {
+    max-width: 270px;
+    margin-bottom: 5px;
+}
+
+.modal-body-page-2 h2 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.set-examples > span, .not-set-examples > span {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.attr-check {
+    margin-bottom: 5px;
+}
+
+.attr-check > div:nth-child(2) {
+    text-align: right;
+}
+
+.check {
+    color: green;
+}
+
+.x {
+    color: red;
 }
