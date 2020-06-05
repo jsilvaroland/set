@@ -7,6 +7,9 @@ Set is derived from the identically titled tabletop card game of pattern recogni
 ## Game Rules
 The object of the game is to identify a Set of 3 cards from 12 placed face up on the field. Each card has four attributes, and each attribute has three possible variants as follows:
 
+![](./src/assets/attributes.png)
+
+A Set consists of 3 cards in which each of the cards' attributes, looked at one-by-one, are either the same between each card OR different between each card. When the deck is empty and there are no remaining sets on the field, you win!
 
 ## Technologies
 * JavaScript
