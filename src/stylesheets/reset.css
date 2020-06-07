@@ -42,6 +42,7 @@ table {
 	border-spacing: 0;
 }
 *:focus {
+	color: #000000;
 	outline: none;
 }
 button:active {
