@@ -18,4 +18,26 @@ A Set consists of 3 cards in which each of the cards' attributes, looked at one-
 * CSS
 
 ## Technical Implementation
-Code snippet for custom rounded rectangle function to come.
+Due to Canvas's limited native functionality when it comes to drawing modified shapes, I created a custom function for drawing rounded rectangles which simulates HTML's border radius property.
+
+    drawRoundedRect(x, y, w, h, stroke, fill, borderRad = 10, lineWidth = 3) {
+        const { ctx } = this;
+
+        ctx.beginPath();
+        ctx.moveTo(x + borderRad, y);
+        ctx.lineTo(x + w - borderRad, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + borderRad);
+        ctx.lineTo(x + w, y + h - borderRad);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - borderRad, y + h);
+        ctx.lineTo(x + borderRad, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - borderRad);
+        ctx.lineTo(x, y + borderRad);
+        ctx.quadraticCurveTo(x, y, x + borderRad, y);
+        ctx.strokeStyle = stroke;
+        ctx.fillStyle = fill;
+        ctx.lineWidth = lineWidth;
+        this.ctx.stroke();
+        this.ctx.fill();
+    }
+    
+This function is called regularly throughout the game&mdash;whenever cards are highlighted, unhighlighted, or added to the board.
