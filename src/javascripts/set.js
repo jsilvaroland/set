@@ -32,8 +32,6 @@ class Set {
   newGameNovice() {
     this.game = new Game(this.ctx, this.canvas, "novice");
   }
-
-  // menu stuff will go here later on
 }
 
 export default Set;

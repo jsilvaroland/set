@@ -18,7 +18,6 @@ class Deck {
 
 	repopulateDeckNovice() {
 	// empties deck if not already empty
-		// this.deck = [];
 		this.cards = [];
 		let image, card;
 		let shading = { shading: 'solid' };
