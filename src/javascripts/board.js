@@ -23,14 +23,15 @@ class Board {
 
     this.field = [];
     this.deck = new Deck(difficulty);
-    this.findSetButton = new Button(400, 15, 106, 35);
-    this.add3CardsButton = new Button(528, 15, 141, 35);
+    // this.findSetButton = new Button(400, 15, 106, 35); use these coords once add 3 cards button is added
+    this.findSetButton = new Button(558, 15, 106, 35);
+    // this.add3CardsButton = new Button(528, 15, 141, 35);
     this.resetCanvas();
     this.initialDisplayCards();
     this.displayDeckCount();
     this.displaySetsFound(0);
     this.displayFindSet();
-    this.displayAdd3Cards();
+    // this.displayAdd3Cards();
   }
 
   resetCanvas() {
@@ -177,29 +178,29 @@ class Board {
     ctx.fillStyle = "#FFFFFF";
   }
 
-  displayAdd3Cards() {
-    const { ctx } = this;
-    const { x, y, width, height } = this.add3CardsButton;
+  // displayAdd3Cards() {
+  //   const { ctx } = this;
+  //   const { x, y, width, height } = this.add3CardsButton;
 
-		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
-    this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+	// 	this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
+  //   this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
-    ctx.fillStyle = "#000000";
-    this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
-    ctx.fillStyle = "#FFFFFF";
-  }
+  //   ctx.fillStyle = "#000000";
+  //   this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
+  //   ctx.fillStyle = "#FFFFFF";
+  // }
 
-  highlightAdd3Cards() {
-    const { ctx } = this;
-    const { x, y, width, height } = this.add3CardsButton;
+  // highlightAdd3Cards() {
+  //   const { ctx } = this;
+  //   const { x, y, width, height } = this.add3CardsButton;
 
-		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
-    this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
+	// 	this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
+  //   this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
 
-    ctx.fillStyle = "#000000";
-    this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
-    ctx.fillStyle = "#FFFFFF";
-  }
+  //   ctx.fillStyle = "#000000";
+  //   this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
+  //   ctx.fillStyle = "#FFFFFF";
+  // }
 
   drawWin() {
     const { ctx } = this;

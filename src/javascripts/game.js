@@ -14,45 +14,61 @@ class Game {
     const mousedownPos = { x: e.layerX, y: e.layerY };
 
     if (
-      mousedownPos.x >= 400 &&
-      mousedownPos.x < 400 + 108 &&
+      mousedownPos.x >= 558 &&
+      mousedownPos.x < 558 + 108 &&
       mousedownPos.y >= 15 &&
       mousedownPos.y < 15 + 37
     ) {
       this.board.highlightFindSet();
-    } else if (
-      mousedownPos.x >= 528 &&
-      mousedownPos.x < 528 + 143 &&
-      mousedownPos.y >= 15 &&
-      mousedownPos.y < 15 + 37
-    ) {
-      this.board.highlightAdd3Cards();
     }
+    // if (
+    //   mousedownPos.x >= 400 &&
+    //   mousedownPos.x < 400 + 108 &&
+    //   mousedownPos.y >= 15 &&
+    //   mousedownPos.y < 15 + 37
+    // ) {
+    //   this.board.highlightFindSet();
+    // } else if (
+    //   mousedownPos.x >= 528 &&
+    //   mousedownPos.x < 528 + 143 &&
+    //   mousedownPos.y >= 15 &&
+    //   mousedownPos.y < 15 + 37
+    // ) {
+    //   this.board.highlightAdd3Cards();
+    // }
   }
 
   unthrottledHandleMouseup() {
-    this.board.displayAdd3Cards();
+    // this.board.displayAdd3Cards();
     this.board.displayFindSet();
   }
 
   handleMouseup(e) {
     const mouseupPos = { x: e.layerX, y: e.layerY };
 
+    // if (
+    //   mouseupPos.x >= 400 &&
+    //   mouseupPos.x < 400 + 108 &&
+    //   mouseupPos.y >= 15 &&
+    //   mouseupPos.y < 15 + 37
+    // ) {
+    //   this.handleClickFindSet();
+    // } else if (
+    //   mouseupPos.x >= 528 &&
+    //   mouseupPos.x < 528 + 143 &&
+    //   mouseupPos.y >= 15 &&
+    //   mouseupPos.y < 15 + 37
+    //   ) {
+    //     this.handleClickAdd3Cards();
+    //   }
     if (
-      mouseupPos.x >= 400 &&
-      mouseupPos.x < 400 + 108 &&
+      mouseupPos.x >= 558 &&
+      mouseupPos.x < 558 + 108 &&
       mouseupPos.y >= 15 &&
       mouseupPos.y < 15 + 37
     ) {
       this.handleClickFindSet();
-    } else if (
-      mouseupPos.x >= 528 &&
-      mouseupPos.x < 528 + 143 &&
-      mouseupPos.y >= 15 &&
-      mouseupPos.y < 15 + 37
-      ) {
-        this.handleClickAdd3Cards();
-      }
+    }
   }
 
   handleClick(e) {
@@ -73,7 +89,7 @@ class Game {
       }
       this.checkClickedCards();
     }
-    console.log(this.clickedCards);
+    // console.log(this.clickedCards);
   }
 
   handleClickFindSet() {
@@ -100,9 +116,9 @@ class Game {
     }
   }
 
-  handleClickAdd3Cards() {
-    console.log("add 3 cards");
-  }
+  // handleClickAdd3Cards() {
+  //   console.log("add 3 cards");
+  // }
 
   findClickedCard(clickPos) {
     const { field } = this.board;
@@ -126,7 +142,7 @@ class Game {
       if (this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
         clickedCards.forEach((card) => {
           this.board.highlightSet(card);
-          console.log('calling highligh set(should only happen thrice');
+          // console.log('calling highligh set(should only happen thrice');
           //display message "SET FOUND"
         });
         this.setFound();
@@ -154,7 +170,7 @@ class Game {
           board.displayCard(cardPosX, cardPosY);
         }
       });
-      console.log(board.field);
+      // console.log(board.field);
       board.displayDeckCount();
       if (
         this.isBoardEmpty.call(this) ||

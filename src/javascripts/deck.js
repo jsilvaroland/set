@@ -10,7 +10,7 @@ const ATTRIBUTES = {
 class Deck {
 	constructor(difficulty) {
 		if (difficulty === 'expert') {
-			this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
+			this.resetDeckExpert();
 		} else {
 			this.resetDeckNovice();
 		}

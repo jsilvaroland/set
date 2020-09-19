@@ -122,14 +122,15 @@ class Board {
 
     this.field = [];
     this.deck = new _deck__WEBPACK_IMPORTED_MODULE_0__["default"](difficulty);
-    this.findSetButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](400, 15, 106, 35);
-    this.add3CardsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](528, 15, 141, 35);
+    // this.findSetButton = new Button(400, 15, 106, 35); use these coords once add 3 cards button is added
+    this.findSetButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](558, 15, 106, 35);
+    // this.add3CardsButton = new Button(528, 15, 141, 35);
     this.resetCanvas();
     this.initialDisplayCards();
     this.displayDeckCount();
     this.displaySetsFound(0);
     this.displayFindSet();
-    this.displayAdd3Cards();
+    // this.displayAdd3Cards();
   }
 
   resetCanvas() {
@@ -276,29 +277,29 @@ class Board {
     ctx.fillStyle = "#FFFFFF";
   }
 
-  displayAdd3Cards() {
-    const { ctx } = this;
-    const { x, y, width, height } = this.add3CardsButton;
+  // displayAdd3Cards() {
+  //   const { ctx } = this;
+  //   const { x, y, width, height } = this.add3CardsButton;
 
-		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
-    this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
+	// 	this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
+  //   this.drawRoundedRect(x, y, width, height, "#959595", "#FFFFFF");
 
-    ctx.fillStyle = "#000000";
-    this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
-    ctx.fillStyle = "#FFFFFF";
-  }
+  //   ctx.fillStyle = "#000000";
+  //   this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
+  //   ctx.fillStyle = "#FFFFFF";
+  // }
 
-  highlightAdd3Cards() {
-    const { ctx } = this;
-    const { x, y, width, height } = this.add3CardsButton;
+  // highlightAdd3Cards() {
+  //   const { ctx } = this;
+  //   const { x, y, width, height } = this.add3CardsButton;
 
-		this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
-    this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
+	// 	this.ctx.clearRect(x - 5, y - 5, width + 5, height + 5);
+  //   this.drawRoundedRect(x, y, width, height, "#959595", "#DDEFFE");
 
-    ctx.fillStyle = "#000000";
-    this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
-    ctx.fillStyle = "#FFFFFF";
-  }
+  //   ctx.fillStyle = "#000000";
+  //   this.ctx.fillText(`Add 3 Cards`, x + 15, y + 25);
+  //   ctx.fillStyle = "#FFFFFF";
+  // }
 
   drawWin() {
     const { ctx } = this;
@@ -386,7 +387,7 @@ const ATTRIBUTES = {
 class Deck {
 	constructor(difficulty) {
 		if (difficulty === 'expert') {
-			this.resetDeckExpert(); // for now deck will be made in constructor, once novice mode is introduced, resetDeck will be removed from constructor and will have to be called depending on button push
+			this.resetDeckExpert();
 		} else {
 			this.resetDeckNovice();
 		}
@@ -394,7 +395,6 @@ class Deck {
 
 	repopulateDeckNovice() {
 	// empties deck if not already empty
-		// this.deck = [];
 		this.cards = [];
 		let image, card;
 		let shading = { shading: 'solid' };
@@ -559,45 +559,61 @@ class Game {
     const mousedownPos = { x: e.layerX, y: e.layerY };
 
     if (
-      mousedownPos.x >= 400 &&
-      mousedownPos.x < 400 + 108 &&
+      mousedownPos.x >= 558 &&
+      mousedownPos.x < 558 + 108 &&
       mousedownPos.y >= 15 &&
       mousedownPos.y < 15 + 37
     ) {
       this.board.highlightFindSet();
-    } else if (
-      mousedownPos.x >= 528 &&
-      mousedownPos.x < 528 + 143 &&
-      mousedownPos.y >= 15 &&
-      mousedownPos.y < 15 + 37
-    ) {
-      this.board.highlightAdd3Cards();
     }
+    // if (
+    //   mousedownPos.x >= 400 &&
+    //   mousedownPos.x < 400 + 108 &&
+    //   mousedownPos.y >= 15 &&
+    //   mousedownPos.y < 15 + 37
+    // ) {
+    //   this.board.highlightFindSet();
+    // } else if (
+    //   mousedownPos.x >= 528 &&
+    //   mousedownPos.x < 528 + 143 &&
+    //   mousedownPos.y >= 15 &&
+    //   mousedownPos.y < 15 + 37
+    // ) {
+    //   this.board.highlightAdd3Cards();
+    // }
   }
 
   unthrottledHandleMouseup() {
-    this.board.displayAdd3Cards();
+    // this.board.displayAdd3Cards();
     this.board.displayFindSet();
   }
 
   handleMouseup(e) {
     const mouseupPos = { x: e.layerX, y: e.layerY };
 
+    // if (
+    //   mouseupPos.x >= 400 &&
+    //   mouseupPos.x < 400 + 108 &&
+    //   mouseupPos.y >= 15 &&
+    //   mouseupPos.y < 15 + 37
+    // ) {
+    //   this.handleClickFindSet();
+    // } else if (
+    //   mouseupPos.x >= 528 &&
+    //   mouseupPos.x < 528 + 143 &&
+    //   mouseupPos.y >= 15 &&
+    //   mouseupPos.y < 15 + 37
+    //   ) {
+    //     this.handleClickAdd3Cards();
+    //   }
     if (
-      mouseupPos.x >= 400 &&
-      mouseupPos.x < 400 + 108 &&
+      mouseupPos.x >= 558 &&
+      mouseupPos.x < 558 + 108 &&
       mouseupPos.y >= 15 &&
       mouseupPos.y < 15 + 37
     ) {
       this.handleClickFindSet();
-    } else if (
-      mouseupPos.x >= 528 &&
-      mouseupPos.x < 528 + 143 &&
-      mouseupPos.y >= 15 &&
-      mouseupPos.y < 15 + 37
-      ) {
-        this.handleClickAdd3Cards();
-      }
+    }
   }
 
   handleClick(e) {
@@ -618,7 +634,7 @@ class Game {
       }
       this.checkClickedCards();
     }
-    console.log(this.clickedCards);
+    // console.log(this.clickedCards);
   }
 
   handleClickFindSet() {
@@ -645,9 +661,9 @@ class Game {
     }
   }
 
-  handleClickAdd3Cards() {
-    console.log("add 3 cards");
-  }
+  // handleClickAdd3Cards() {
+  //   console.log("add 3 cards");
+  // }
 
   findClickedCard(clickPos) {
     const { field } = this.board;
@@ -671,7 +687,7 @@ class Game {
       if (this.isSet(clickedCards[0], clickedCards[1], clickedCards[2])) {
         clickedCards.forEach((card) => {
           this.board.highlightSet(card);
-          console.log('calling highligh set(should only happen thrice');
+          // console.log('calling highligh set(should only happen thrice');
           //display message "SET FOUND"
         });
         this.setFound();
@@ -699,7 +715,7 @@ class Game {
           board.displayCard(cardPosX, cardPosY);
         }
       });
-      console.log(board.field);
+      // console.log(board.field);
       board.displayDeckCount();
       if (
         this.isBoardEmpty.call(this) ||
@@ -878,8 +894,6 @@ class Set {
   newGameNovice() {
     this.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas, "novice");
   }
-
-  // menu stuff will go here later on
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Set);
